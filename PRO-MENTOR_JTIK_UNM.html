@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRO-MENTOR — Sistem Rekrutmen Mentor JTIK UNM</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;font-size:14px;}
+.hidden{display:none!important;}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:#fff;border-bottom:1px solid #e8eaed;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:16px;font-weight:600;color:#1a1a2e;}
+.nav-logo span{color:#185FA5;}
+.nav-right{display:flex;align-items:center;gap:10px;font-size:13px;color:#666;}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;}
+.av-d{background:#dbeafe;color:#1e40af;}
+.av-m{background:#dcfce7;color:#166534;}
+.rb{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.rb-d{background:#dbeafe;color:#1e40af;}
+.rb-m{background:#dcfce7;color:#166534;}
+/* TABS */
+.tab-bar{display:flex;gap:2px;padding:0 24px;border-bottom:1px solid #e8eaed;background:#fff;overflow-x:auto;}
+.tab{font-size:13px;padding:10px 14px;border:none;background:none;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s;}
+.tab:hover{color:#185FA5;}
+.tab.active{color:#185FA5;border-bottom-color:#185FA5;font-weight:500;}
+/* CONTENT */
+.content{padding:20px 24px;max-width:960px;margin:0 auto;}
+.page{display:none;}
+.page.active{display:block;}
+/* CARDS */
+.card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:16px 18px;margin-bottom:12px;}
+.st{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:10px;}
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.sc{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:14px;}
+.sl{font-size:11px;color:#888;margin-bottom:4px;}
+.sv{font-size:22px;font-weight:600;color:#1a1a2e;}
+.ss{font-size:11px;color:#aaa;margin-top:2px;}
+/* BADGES */
+.badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.bp{background:#fef3c7;color:#92400e;}
+.br{background:#dbeafe;color:#1e40af;}
+.ba{background:#dcfce7;color:#166534;}
+.bx{background:#fee2e2;color:#991b1b;}
+/* ROWS */
+.row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+.row:last-child{border-bottom:none;}
+.ri{display:flex;align-items:center;gap:10px;}
+.rn{font-size:13px;font-weight:500;color:#1a1a2e;}
+.rs{font-size:11px;color:#888;}
+/* GRID */
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* FORMS */
+.fg{margin-bottom:12px;}
+.fl{font-size:12px;color:#666;margin-bottom:4px;display:block;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+input[type=text],input[type=password],input[type=email],select,textarea{width:100%;font-size:13px;padding:9px 12px;border:1px solid #d1d5db;border-radius:8px;background:#fff;color:#1a1a2e;outline:none;transition:border .2s;}
+input:focus,select:focus,textarea:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,165,.1);}
+textarea{resize:vertical;min-height:60px;}
+input[type=range]{width:100%;accent-color:#185FA5;}
+/* BUTTONS */
+.btn{font-size:13px;padding:8px 16px;border:1px solid #d1d5db;border-radius:8px;cursor:pointer;background:#fff;color:#1a1a2e;transition:all .2s;}
+.btn:hover{background:#f5f6fa;}
+.btn-p{background:#185FA5;color:#fff;border-color:#185FA5;}
+.btn-p:hover{background:#0c447c;}
+.btn-s{background:#dcfce7;color:#166534;border-color:#166534;}
+.btn-x{background:#fee2e2;color:#991b1b;border-color:#991b1b;}
+.bsm{font-size:11px;padding:4px 10px;}
+/* PROGRESS */
+.prog-bar{height:6px;background:#e8eaed;border-radius:3px;overflow:hidden;margin-top:6px;}
+.prog-fill{height:100%;border-radius:3px;background:#185FA5;}
+/* STARS */
+.star-row{display:flex;gap:3px;}
+.star{font-size:22px;cursor:pointer;color:#d1d5db;transition:color .1s;line-height:1;}
+.star.on{color:#f59e0b;}
+/* SELF ASSESSMENT */
+.sa-item{background:#f9fafb;border-radius:8px;padding:12px;margin-bottom:8px;}
+.sa-q{font-size:13px;color:#1a1a2e;margin-bottom:8px;font-weight:500;}
+.sa-opt{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#555;cursor:pointer;padding:3px 0;}
+.sa-opt input[type=radio]{width:auto;margin-top:2px;}
+/* FEEDBACK */
+.fb-item{padding:10px 0;border-bottom:1px solid #f0f0f0;}
+.fb-item:last-child{border-bottom:none;}
+.fb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.fb-name{font-size:13px;font-weight:500;color:#1a1a2e;}
+.fb-date{font-size:11px;color:#aaa;}
+.fb-text{font-size:12px;color:#666;line-height:1.6;}
+.fb-stars{font-size:14px;color:#f59e0b;}
+/* NOTIF */
+.ndot{width:8px;height:8px;border-radius:50%;background:#185FA5;flex-shrink:0;margin-top:4px;}
+.ndot.read{background:#d1d5db;}
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f6fa;padding:20px;}
+.login-box{width:100%;max-width:360px;background:#fff;border:1px solid #e8eaed;border-radius:16px;padding:32px;}
+.role-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.role-btn{padding:14px 10px;border:1px solid #e8eaed;border-radius:10px;cursor:pointer;background:#f9fafb;text-align:center;font-size:13px;color:#666;transition:all .2s;}
+.role-btn:hover{border-color:#185FA5;background:#f0f7ff;}
+.role-btn.selected{border-color:#185FA5;background:#dbeafe;color:#1e40af;font-weight:500;}
+.role-icon{font-size:28px;margin-bottom:6px;display:block;}
+/* SCORE BAR */
+.sbar{display:flex;align-items:center;gap:8px;}
+.sbar-track{flex:1;height:6px;background:#e8eaed;border-radius:3px;overflow:hidden;}
+.sbar-fill{height:100%;background:#185FA5;border-radius:3px;}
+/* DIST BAR */
+.dist-row{display:flex;align-items:center;gap:10px;font-size:12px;color:#666;}
+.dist-track{flex:1;background:#e8eaed;border-radius:3px;height:14px;overflow:hidden;}
+.dist-fill{height:100%;border-radius:3px;}
+@media(max-width:600px){
+  .sg{grid-template-columns:1fr 1fr;}
+  .tc{grid-template-columns:1fr;}
+  .fr{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="ls">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:26px;font-weight:700;color:#185FA5;margin-bottom:4px;"><span style="color:#1a1a2e;">PRO</span>-MENTOR</div>
+        <div style="font-size:12px;color:#888;">Sistem Rekrutmen Mentor JTIK UNM</div>
+      </div>
+      <div style="font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:4px;">Masuk ke sistem</div>
+      <div style="font-size:12px;color:#888;margin-bottom:16px;">Pilih peran Anda terlebih dahulu</div>
+      <div class="role-btns">
+        <div class="role-btn" id="rb-d" onclick="selRole('dosen')">
+          <span class="role-icon">🎓</span>Dosen
+        </div>
+        <div class="role-btn" id="rb-m" onclick="selRole('mahasiswa')">
+          <span class="role-icon">👤</span>Mahasiswa
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Email / NIM</label><input type="text" id="lid" placeholder="Masukkan email atau NIM"/></div>
+      <div class="fg"><label class="fl">Kata sandi</label><input type="password" placeholder="Masukkan kata sandi"/></div>
+      <button class="btn btn-p" style="width:100%;margin-top:6px;font-size:14px;padding:10px;" onclick="doLogin()">Masuk</button>
+      <div id="lerr" style="font-size:12px;color:#991b1b;margin-top:8px;text-align:center;display:none;">Pilih peran terlebih dahulu.</div>
+      <div style="margin-top:16px;padding:12px;background:#f0f7ff;border-radius:8px;font-size:12px;color:#555;">
+        <strong style="color:#1e40af;">Demo Login:</strong><br>
+        Dosen → masuk sebagai <strong>Ainun Nida Rifqi</strong><br>
+        Mahasiswa → masuk sebagai <strong>Ahmad Reza</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <div class="nav">
+    <div class="nav-logo"><span>PRO</span>-MENTOR <span style="font-size:11px;font-weight:400;color:#888;margin-left:6px;">JTIK UNM</span></div>
+    <div class="nav-right">
+      <div class="av" id="nav-av"></div>
+      <span id="nav-nm" style="font-weight:500;"></span>
+      <span class="rb" id="nav-rb"></span>
+      <button class="btn bsm" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- DOSEN TABS -->
+  <div class="tab-bar" id="tb-d" style="display:none;">
+    <button class="tab active" onclick="sp('d-home',this)">Beranda</button>
+    <button class="tab" onclick="sp('d-pendaftar',this)">Pendaftar</button>
+    <button class="tab" onclick="sp('d-seleksi',this)">Seleksi</button>
+    <button class="tab" onclick="sp('d-pasangan',this)">Pasangan Mentor</button>
+    <button class="tab" onclick="sp('d-feedback',this)">Rekap Feedback</button>
+    <button class="tab" onclick="sp('d-laporan',this)">Laporan</button>
+  </div>
+
+  <!-- MAHASISWA TABS -->
+  <div class="tab-bar" id="tb-m" style="display:none;">
+    <button class="tab active" onclick="sp('m-home',this)">Beranda</button>
+    <button class="tab" onclick="sp('m-daftar',this)">Daftar Mentor</button>
+    <button class="tab" onclick="sp('m-seleksi',this)">Status Seleksi</button>
+    <button class="tab" onclick="sp('m-self',this)">Self Assessment</button>
+    <button class="tab" onclick="sp('m-feedback',this)">Feedback</button>
+    <button class="tab" onclick="sp('m-notif',this)">Notifikasi</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ======= DOSEN ======= -->
+
+    <!-- D: BERANDA -->
+    <div class="page" id="page-d-home">
+      <div class="sg">
+        <div class="sc"><div class="sl">Total Pendaftar</div><div class="sv">24</div><div class="ss">TA 2026</div></div>
+        <div class="sc"><div class="sl">Dalam Seleksi</div><div class="sv">12</div><div class="ss">Diproses</div></div>
+        <div class="sc"><div class="sl">Mentor Diterima</div><div class="sv" style="color:#166534;">8</div><div class="ss">Aktif</div></div>
+        <div class="sc"><div class="sl">Rata-rata Feedback</div><div class="sv" style="color:#f59e0b;">4.2</div><div class="ss">dari 5 bintang</div></div>
+      </div>
+      <div class="tc">
+        <div>
+          <div class="st">Progress Rekrutmen</div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-weight:500;">Rekrutmen Mentor 2026</span><span class="badge br">Aktif</span></div>
+            <div style="font-size:12px;color:#888;margin-bottom:6px;">Pendaftaran ditutup: 20 Mei 2026</div>
+            <div class="prog-bar"><div class="prog-fill" style="width:65%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:11px;color:#888;">16 dari 24 diproses</span><span style="font-size:11px;color:#185FA5;font-weight:500;">65%</span></div>
+          </div>
+          <div class="st" style="margin-top:4px;">Tahapan Rekrutmen</div>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#666;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#166534;font-weight:500;">✓ Pendaftaran Online</span><span>6–20 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#92400e;font-weight:500;">→ Seleksi Administrasi</span><span>21–23 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Penilaian Rubrik</span><span>24–28 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Pengumuman Hasil</span><span>30 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Sosialisasi Mentor</span><span>2–6 Juni 2026</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="st">Pendaftar Terbaru</div>
+          <div class="card">
+            <div class="row"><div class="ri"><div class="av av-m" style="width:32px;height:32px;">AR</div><div><div class="rn">Ahmad Reza</div><div class="rs">Skor: 83 / 100</div></div></div><span class="badge br">Review</span></div>
+            <div class="row"><div class="ri"><div class="av av-d" style="width:32px;height:32px;">SF</div><div><div class="rn">Siti Fatimah</div><div class="rs">Skor: 91 / 100</div></div></div><span class="badge ba">Diterima</span></div>
+            <div class="row"><div class="ri"><div class="av" style="width:32px;height:32px;background:#fef3c7;color:#92400e;">BN</div><div><div class="rn">Budi Nugroho</div><div class="rs">Skor: 65 / 100</div></div></div><span class="badge bp">Pending</span></div>
+            <div class="row"><div class="ri"><div class="av" style="width:32px;height:32px;background:#fee2e2;color:#991b1b;">DK</div><div><div class="rn">Dewi Kartika</div><div class="rs">Skor: 58 / 100</div></div></div><span class="badge bx">Ditolak</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;">
+            <button class="btn" style="font-size:12px;" onclick="sp('d-pendaftar',document.querySelectorAll('#tb-d .tab')[1])">Lihat Semua Pendaftar</button>
+            <button class="btn btn-p" style="font-size:12px;" onclick="sp('d-seleksi',document.querySelectorAll('#tb-d .tab')[2])">Mulai Seleksi</button>
+            <button class="btn" style="font-size:12px;" onclick="sp('d-feedback',document.querySelectorAll('#tb-d .tab')[4])">Rekap Feedback</button>
+            <button class="btn" style="font-size:12px;" onclick="sp('d-laporan',document.querySelectorAll('#tb-d .tab')[5])">Unduh Laporan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: PENDAFTAR -->
+    <div class="page" id="page-d-pendaftar">
+      <div class="st">Daftar Semua Pendaftar</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <select style="width:160px;"><option>Semua Status</option><option>Pending</option><option>Review</option><option>Diterima</option><option>Ditolak</option></select>
+        <select style="width:200px;"><option>Semua Prodi</option><option>PTIK</option><option>Teknik Komputer</option></select>
+        <input type="text" placeholder="Cari nama / NIM..." style="flex:1;min-width:150px;"/>
+      </div>
+      <div class="card" style="padding:0 18px;">
+        <div class="row" style="padding:12px 0;"><div class="ri"><div class="av av-m" style="width:34px;height:34px;">AR</div><div><div class="rn">Ahmad Reza</div><div class="rs">220209001 · PTIK · IPK 3.72 · Semester 5</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="badge br">Review</span><button class="btn bsm" onclick="sp('d-seleksi',document.querySelectorAll('#tb-d .tab')[2])">Nilai</button></div></div>
+        <div class="row" style="padding:12px 0;"><div class="ri"><div class="av av-d" style="width:34px;height:34px;">SF</div><div><div class="rn">Siti Fatimah</div><div class="rs">220209008 · PTIK · IPK 3.91 · Semester 5</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="badge ba">Diterima</span><button class="btn bsm">Detail</button></div></div>
+        <div class="row" style="padding:12px 0;"><div class="ri"><div class="av" style="width:34px;height:34px;background:#fef3c7;color:#92400e;">BN</div><div><div class="rn">Budi Nugroho</div><div class="rs">220209015 · Teknik Komputer · IPK 3.45 · Semester 4</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="badge bp">Pending</span><button class="btn bsm" onclick="sp('d-seleksi',document.querySelectorAll('#tb-d .tab')[2])">Nilai</button></div></div>
+        <div class="row" style="padding:12px 0;"><div class="ri"><div class="av" style="width:34px;height:34px;background:#fee2e2;color:#991b1b;">DK</div><div><div class="rn">Dewi Kartika</div><div class="rs">220209022 · Teknik Komputer · IPK 3.21 · Semester 4</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="badge bx">Ditolak</span><button class="btn bsm">Detail</button></div></div>
+        <div class="row" style="padding:12px 0;"><div class="ri"><div class="av" style="width:34px;height:34px;background:#d1fae5;color:#065f46;">RM</div><div><div class="rn">Rizky Maulana</div><div class="rs">220209031 · PTIK · IPK 3.68 · Semester 5</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="badge br">Review</span><button class="btn bsm" onclick="sp('d-seleksi',document.querySelectorAll('#tb-d .tab')[2])">Nilai</button></div></div>
+      </div>
+    </div>
+
+    <!-- D: SELEKSI -->
+    <div class="page" id="page-d-seleksi">
+      <div class="st">Rubrik Penilaian — Ahmad Reza (220209001)</div>
+      <div class="card">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div style="background:#f9fafb;border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:#1a1a2e;margin-bottom:6px;">Kompetensi Akademik</div>
+            <input type="range" min="0" max="25" value="22" step="1" oninput="updScore()" id="s1"/>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:2px;"><span>0</span><span id="v1" style="font-weight:500;color:#185FA5;">22</span><span>25</span></div>
+          </div>
+          <div style="background:#f9fafb;border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:#1a1a2e;margin-bottom:6px;">Kemampuan Komunikasi</div>
+            <input type="range" min="0" max="25" value="18" step="1" oninput="updScore()" id="s2"/>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:2px;"><span>0</span><span id="v2" style="font-weight:500;color:#185FA5;">18</span><span>25</span></div>
+          </div>
+          <div style="background:#f9fafb;border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:#1a1a2e;margin-bottom:6px;">Kepemimpinan</div>
+            <input type="range" min="0" max="25" value="20" step="1" oninput="updScore()" id="s3"/>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:2px;"><span>0</span><span id="v3" style="font-weight:500;color:#185FA5;">20</span><span>25</span></div>
+          </div>
+          <div style="background:#f9fafb;border-radius:8px;padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:#1a1a2e;margin-bottom:6px;">Integritas & Komitmen</div>
+            <input type="range" min="0" max="25" value="23" step="1" oninput="updScore()" id="s4"/>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:2px;"><span>0</span><span id="v4" style="font-weight:500;color:#185FA5;">23</span><span>25</span></div>
+          </div>
+        </div>
+        <div style="background:#f0f7ff;border-radius:10px;padding:14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:14px;font-weight:600;color:#1a1a2e;">Total Skor</span><span style="font-size:28px;font-weight:700;" id="tscore">83</span></div>
+          <div style="font-size:12px;margin-top:2px;" id="tstatus">✓ Memenuhi syarat minimum kelulusan (70)</div>
+          <div class="prog-bar" style="margin-top:8px;height:8px;"><div id="tbar" class="prog-fill" style="width:83%"></div></div>
+        </div>
+        <div class="fg"><label class="fl">Catatan dan Rekomendasi Dosen</label><textarea placeholder="Tuliskan catatan atau rekomendasi untuk kandidat ini..."></textarea></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button class="btn btn-x bsm" onclick="alert('Ahmad Reza telah ditolak dari program PRO-MENTOR.')">Tolak Kandidat</button>
+          <button class="btn btn-s bsm" onclick="alert('Ahmad Reza diterima sebagai Mentor PRO-MENTOR 2026!')">Terima Kandidat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: PASANGAN -->
+    <div class="page" id="page-d-pasangan">
+      <div class="st">Pengaturan Pasangan Mentor – Mentee</div>
+      <div class="tc">
+        <div>
+          <div class="card">
+            <div class="st">Pasangan Aktif</div>
+            <div class="row"><div><div style="font-weight:500;">Siti Fatimah</div><div class="rs">Mentor · PTIK · Angkatan 2022</div></div><div style="text-align:right;"><div style="font-weight:500;color:#166534;">4 mentee</div><div class="rs">Angkatan 2026</div></div></div>
+            <div class="row"><div><div style="font-weight:500;">Rizky Maulana</div><div class="rs">Mentor · PTIK · Angkatan 2022</div></div><div style="text-align:right;"><div style="font-weight:500;color:#166534;">4 mentee</div><div class="rs">Angkatan 2026</div></div></div>
+            <div class="row"><div><div style="font-weight:500;">Ahmad Reza</div><div class="rs">Mentor · PTIK · Angkatan 2022</div></div><div style="text-align:right;"><div style="font-weight:500;color:#92400e;">Belum dipasang</div><div class="rs">Menunggu</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="st">Tambah Pasangan Baru</div>
+            <div class="fg"><label class="fl">Pilih Mentor</label><select><option>Ahmad Reza (220209001)</option><option>Siti Fatimah (220209008)</option><option>Rizky Maulana (220209031)</option></select></div>
+            <div class="fg"><label class="fl">Pilih Mentee</label><select><option>Muh. Fajar (230209010)</option><option>Nur Aini (230209011)</option><option>Hendra W. (230209012)</option><option>Rani Putri (230209013)</option></select></div>
+            <div class="fg"><label class="fl">Program Studi</label><select><option>PTIK</option><option>Teknik Komputer</option></select></div>
+            <button class="btn btn-p" style="width:100%;" onclick="alert('Pasangan mentor-mentee berhasil ditambahkan!')">Simpan Pasangan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: FEEDBACK -->
+    <div class="page" id="page-d-feedback">
+      <div class="st">Rekap Feedback Mentor dari Mentee</div>
+      <div class="sg" style="grid-template-columns:repeat(3,1fr);">
+        <div class="sc"><div class="sl">Total Feedback</div><div class="sv">38</div><div class="ss">Dari semua mentee</div></div>
+        <div class="sc"><div class="sl">Rata-rata Bintang</div><div class="sv" style="color:#f59e0b;">4.2</div><div class="ss">Dari 5.0</div></div>
+        <div class="sc"><div class="sl">Mentor Terbaik</div><div class="sv" style="font-size:14px;">Siti Fatimah</div><div class="ss">Bintang 4.8</div></div>
+      </div>
+      <div class="card">
+        <div class="st">Performa Per Mentor</div>
+        <div class="row">
+          <div class="ri"><div class="av av-d" style="width:34px;height:34px;">SF</div><div><div class="rn">Siti Fatimah</div><div class="rs">16 feedback diterima</div></div></div>
+          <div style="text-align:right;"><div style="font-size:14px;color:#f59e0b;">★★★★★</div><div style="font-size:12px;color:#888;">4.8 / 5.0</div></div>
+        </div>
+        <div class="row">
+          <div class="ri"><div class="av" style="width:34px;height:34px;background:#d1fae5;color:#065f46;">RM</div><div><div class="rn">Rizky Maulana</div><div class="rs">14 feedback diterima</div></div></div>
+          <div style="text-align:right;"><div style="font-size:14px;color:#f59e0b;">★★★★☆</div><div style="font-size:12px;color:#888;">4.1 / 5.0</div></div>
+        </div>
+        <div class="row">
+          <div class="ri"><div class="av av-m" style="width:34px;height:34px;">AR</div><div><div class="rn">Ahmad Reza</div><div class="rs">8 feedback diterima</div></div></div>
+          <div style="text-align:right;"><div style="font-size:14px;color:#f59e0b;">★★★★☆</div><div style="font-size:12px;color:#888;">3.9 / 5.0</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="st">Komentar Terbaru Mentee</div>
+        <div class="fb-item"><div class="fb-head"><span class="fb-name">Muh. Fajar → Siti Fatimah</span><span class="fb-date">2 Mei 2026</span></div><div class="fb-stars">★★★★★</div><div class="fb-text" style="margin-top:4px;">Mentor sangat sabar dan mudah dihubungi. Selalu membantu saat saya kesulitan memahami materi pemrograman dasar.</div></div>
+        <div class="fb-item"><div class="fb-head"><span class="fb-name">Nur Aini → Rizky Maulana</span><span class="fb-date">1 Mei 2026</span></div><div class="fb-stars">★★★★☆</div><div class="fb-text" style="margin-top:4px;">Penjelasan cukup jelas namun kadang sulit dihubungi di luar jam pertemuan. Secara keseluruhan sangat membantu.</div></div>
+        <div class="fb-item"><div class="fb-head"><span class="fb-name">Hendra W. → Ahmad Reza</span><span class="fb-date">30 Apr 2026</span></div><div class="fb-stars">★★★★☆</div><div class="fb-text" style="margin-top:4px;">Mentor aktif dan responsif. Saran: lebih banyak latihan soal bersama agar lebih efektif.</div></div>
+      </div>
+    </div>
+
+    <!-- D: LAPORAN -->
+    <div class="page" id="page-d-laporan">
+      <div class="st">Laporan Rekrutmen Mentor 2026</div>
+      <div class="sg">
+        <div class="sc"><div class="sl">Total Pendaftar</div><div class="sv">24</div></div>
+        <div class="sc"><div class="sl">Diterima</div><div class="sv" style="color:#166534;">8</div></div>
+        <div class="sc"><div class="sl">Ditolak</div><div class="sv" style="color:#991b1b;">4</div></div>
+        <div class="sc"><div class="sl">Rata-rata Skor</div><div class="sv">78</div></div>
+      </div>
+      <div class="card">
+        <div class="st">Distribusi Skor Pendaftar</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="dist-row"><span style="width:80px;">90–100</span><div class="dist-track"><div class="dist-fill" style="width:25%;background:#185FA5;"></div></div><span>6 orang</span></div>
+          <div class="dist-row"><span style="width:80px;">80–89</span><div class="dist-track"><div class="dist-fill" style="width:33%;background:#185FA5;"></div></div><span>8 orang</span></div>
+          <div class="dist-row"><span style="width:80px;">70–79</span><div class="dist-track"><div class="dist-fill" style="width:17%;background:#166534;"></div></div><span>4 orang</span></div>
+          <div class="dist-row"><span style="width:80px;">Di bawah 70</span><div class="dist-track"><div class="dist-fill" style="width:25%;background:#991b1b;"></div></div><span>6 orang</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="st">Rekap Prodi</div>
+        <div class="dist-row" style="margin-bottom:8px;"><span style="width:220px;">Pendidikan Teknik Informatika & Komputer</span><div class="dist-track"><div class="dist-fill" style="width:58%;background:#185FA5;"></div></div><span>14 orang</span></div>
+        <div class="dist-row"><span style="width:220px;">Teknik Komputer</span><div class="dist-track"><div class="dist-fill" style="width:42%;background:#166534;"></div></div><span>10 orang</span></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-p" onclick="alert('Laporan PDF sedang diunduh...')">Unduh Laporan PDF</button>
+        <button class="btn" onclick="alert('Laporan Excel sedang diunduh...')">Unduh Excel</button>
+      </div>
+    </div>
+
+    <!-- ======= MAHASISWA ======= -->
+
+    <!-- M: BERANDA -->
+    <div class="page" id="page-m-home">
+      <div class="sg">
+        <div class="sc"><div class="sl">Status Saya</div><div class="sv" style="font-size:15px;color:#92400e;">Pending</div><div class="ss">Menunggu review</div></div>
+        <div class="sc"><div class="sl">Skor Saya</div><div class="sv">83</div><div class="ss">Dari 100 poin</div></div>
+        <div class="sc"><div class="sl">Self Assessment</div><div class="sv" style="color:#166534;font-size:14px;">Selesai</div><div class="ss">1 Mei 2026</div></div>
+        <div class="sc"><div class="sl">Feedback Dikirim</div><div class="sv">2</div><div class="ss">Ulasan aktif</div></div>
+      </div>
+      <div class="tc">
+        <div>
+          <div class="st">Status Pendaftaran Saya</div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-weight:600;">Ahmad Reza · 220209001</span><span class="badge bp">Pending</span></div>
+            <div style="font-size:12px;color:#888;margin-bottom:10px;">Berkas sedang dalam tahap seleksi administrasi oleh dosen pengelola.</div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:1;text-align:center;padding:6px;background:#dcfce7;border-radius:8px;font-size:11px;color:#166534;font-weight:500;">Berkas Lengkap</div>
+              <div style="flex:1;text-align:center;padding:6px;background:#fef3c7;border-radius:8px;font-size:11px;color:#92400e;font-weight:500;">Seleksi Aktif</div>
+              <div style="flex:1;text-align:center;padding:6px;background:#f5f6fa;border-radius:8px;font-size:11px;color:#888;">Pengumuman</div>
+            </div>
+          </div>
+          <div class="st" style="margin-top:4px;">Jadwal Tahapan</div>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#666;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#166534;font-weight:500;">✓ Pendaftaran Online</span><span>6–20 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#92400e;font-weight:500;">→ Seleksi Administrasi</span><span>21–23 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Penilaian Rubrik</span><span>24–28 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Pengumuman Hasil</span><span>30 Mei 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Sosialisasi Mentor</span><span>2–6 Juni 2026</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="st">Aksi Cepat</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <button class="btn" style="padding:14px;font-size:12px;text-align:center;" onclick="sp('m-self',document.querySelectorAll('#tb-m .tab')[3])">Self Assessment</button>
+            <button class="btn" style="padding:14px;font-size:12px;text-align:center;" onclick="sp('m-feedback',document.querySelectorAll('#tb-m .tab')[4])">Beri Feedback</button>
+            <button class="btn" style="padding:14px;font-size:12px;text-align:center;" onclick="sp('m-seleksi',document.querySelectorAll('#tb-m .tab')[2])">Status Seleksi</button>
+            <button class="btn btn-p" style="padding:14px;font-size:12px;text-align:center;" onclick="sp('m-notif',document.querySelectorAll('#tb-m .tab')[5])">Notifikasi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M: DAFTAR -->
+    <div class="page" id="page-m-daftar">
+      <div class="st">Formulir Pendaftaran Mentor PRO-MENTOR 2026</div>
+      <div class="card">
+        <div class="fr">
+          <div class="fg"><label class="fl">Nama Lengkap</label><input type="text" placeholder="Masukkan nama lengkap"/></div>
+          <div class="fg"><label class="fl">NIM</label><input type="text" placeholder="220209001"/></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Program Studi</label><select><option>Pilih Prodi</option><option>Pendidikan Teknik Informatika dan Komputer</option><option>Teknik Komputer</option></select></div>
+          <div class="fg"><label class="fl">Semester Aktif</label><select><option>Pilih Semester</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">IPK Terakhir</label><input type="text" placeholder="Contoh: 3.75"/></div>
+          <div class="fg"><label class="fl">No. WhatsApp Aktif</label><input type="text" placeholder="0812xxxxxxxx"/></div>
+        </div>
+        <div class="fg"><label class="fl">Email Aktif</label><input type="email" placeholder="nama@email.com"/></div>
+        <div class="fg"><label class="fl">Pengalaman Organisasi / Kepanitiaan</label><textarea placeholder="Ceritakan pengalaman organisasi atau kepanitiaan yang pernah diikuti..."></textarea></div>
+        <div class="fg"><label class="fl">Motivasi Menjadi Mentor PRO-MENTOR</label><textarea placeholder="Mengapa Anda ingin menjadi mentor bagi mahasiswa baru?"></textarea></div>
+        <div class="fg"><label class="fl">Ketersediaan Waktu (jam per minggu)</label><select><option>Pilih</option><option>1–2 jam per minggu</option><option>2–3 jam per minggu</option><option>3–4 jam per minggu</option><option>Lebih dari 4 jam per minggu</option></select></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+          <div style="font-size:12px;color:#888;">Pastikan semua data terisi dengan benar.</div>
+          <button class="btn btn-p" onclick="alert('Pendaftaran berhasil dikirim! Pantau status di halaman Beranda.')">Kirim Pendaftaran</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- M: STATUS SELEKSI -->
+    <div class="page" id="page-m-seleksi">
+      <div class="st">Status Seleksi Saya</div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;"><span style="font-weight:600;">Ahmad Reza — 220209001</span><span class="badge bp">Sedang Diproses</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div style="background:#f9fafb;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#888;">Kompetensi Akademik</div><div class="sbar" style="margin-top:5px;"><div class="sbar-track"><div class="sbar-fill" style="width:88%"></div></div><span style="font-size:12px;color:#888;">22/25</span></div></div>
+          <div style="background:#f9fafb;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#888;">Kemampuan Komunikasi</div><div class="sbar" style="margin-top:5px;"><div class="sbar-track"><div class="sbar-fill" style="width:72%"></div></div><span style="font-size:12px;color:#888;">18/25</span></div></div>
+          <div style="background:#f9fafb;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#888;">Kepemimpinan</div><div class="sbar" style="margin-top:5px;"><div class="sbar-track"><div class="sbar-fill" style="width:80%"></div></div><span style="font-size:12px;color:#888;">20/25</span></div></div>
+          <div style="background:#f9fafb;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#888;">Integritas & Komitmen</div><div class="sbar" style="margin-top:5px;"><div class="sbar-track"><div class="sbar-fill" style="width:92%"></div></div><span style="font-size:12px;color:#888;">23/25</span></div></div>
+        </div>
+        <div style="background:#f0f7ff;border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:14px;font-weight:600;">Total Skor</div><div style="font-size:12px;color:#888;">Nilai minimum: 70 poin</div></div>
+          <span style="font-size:32px;font-weight:700;color:#185FA5;">83</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- M: SELF ASSESSMENT -->
+    <div class="page" id="page-m-self">
+      <div class="st">Self Assessment Calon Mentor PRO-MENTOR</div>
+      <div style="font-size:12px;color:#888;margin-bottom:14px;background:#f0f7ff;padding:10px 14px;border-radius:8px;">Isilah penilaian diri secara jujur dan objektif. Hasil self assessment ini akan menjadi bahan refleksi dan pertimbangan tambahan dalam proses seleksi mentor.</div>
+
+      <div class="card">
+        <div class="st">A. Kompetensi Akademik</div>
+        <div class="sa-item">
+          <div class="sa-q">1. Bagaimana Anda menilai kemampuan akademik Anda secara keseluruhan?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q1" value="4"/> Sangat baik — IPK di atas 3.75 dan aktif dalam kegiatan akademik</label>
+            <label class="sa-opt"><input type="radio" name="q1" value="3" checked/> Baik — IPK di atas 3.50 dan cukup aktif</label>
+            <label class="sa-opt"><input type="radio" name="q1" value="2"/> Cukup — IPK di atas 3.00</label>
+            <label class="sa-opt"><input type="radio" name="q1" value="1"/> Perlu ditingkatkan — IPK di bawah 3.00</label>
+          </div>
+        </div>
+        <div class="sa-item">
+          <div class="sa-q">2. Seberapa mampu Anda menjelaskan materi perkuliahan kepada orang lain?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q2" value="4"/> Sangat mampu — selalu berhasil membuat orang lain paham</label>
+            <label class="sa-opt"><input type="radio" name="q2" value="3"/> Mampu — cukup sering berhasil</label>
+            <label class="sa-opt"><input type="radio" name="q2" value="2" checked/> Kadang-kadang mampu</label>
+            <label class="sa-opt"><input type="radio" name="q2" value="1"/> Masih perlu latihan</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="st">B. Kemampuan Interpersonal</div>
+        <div class="sa-item">
+          <div class="sa-q">3. Bagaimana kemampuan Anda dalam berkomunikasi dan berempati dengan orang lain?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q3" value="4"/> Sangat baik — mudah membangun hubungan dan memahami perasaan orang lain</label>
+            <label class="sa-opt"><input type="radio" name="q3" value="3" checked/> Baik — umumnya mampu berkomunikasi dengan baik</label>
+            <label class="sa-opt"><input type="radio" name="q3" value="2"/> Cukup — dalam situasi tertentu saja</label>
+            <label class="sa-opt"><input type="radio" name="q3" value="1"/> Masih perlu pengembangan</label>
+          </div>
+        </div>
+        <div class="sa-item">
+          <div class="sa-q">4. Seberapa siap Anda meluangkan waktu di luar jadwal kuliah untuk mendampingi mentee?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q4" value="4"/> Sangat siap — minimal 4 jam per minggu</label>
+            <label class="sa-opt"><input type="radio" name="q4" value="3" checked/> Siap — sekitar 2–3 jam per minggu</label>
+            <label class="sa-opt"><input type="radio" name="q4" value="2"/> Cukup siap — 1–2 jam per minggu</label>
+            <label class="sa-opt"><input type="radio" name="q4" value="1"/> Belum pasti jadwalnya</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="st">C. Kepemimpinan & Motivasi</div>
+        <div class="sa-item">
+          <div class="sa-q">5. Apakah Anda pernah memegang peran kepemimpinan dalam organisasi atau kepanitiaan?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q5" value="4"/> Ya, sering — lebih dari 2 kali sebagai ketua/koordinator</label>
+            <label class="sa-opt"><input type="radio" name="q5" value="3" checked/> Ya, pernah — 1–2 kali</label>
+            <label class="sa-opt"><input type="radio" name="q5" value="2"/> Pernah sebagai anggota/panitia</label>
+            <label class="sa-opt"><input type="radio" name="q5" value="1"/> Belum pernah</label>
+          </div>
+        </div>
+        <div class="sa-item">
+          <div class="sa-q">6. Apa motivasi utama Anda mendaftar sebagai Mentor PRO-MENTOR?</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label class="sa-opt"><input type="radio" name="q6" value="4" checked/> Ingin berbagi ilmu dan membantu mahasiswa baru beradaptasi</label>
+            <label class="sa-opt"><input type="radio" name="q6" value="3"/> Ingin mengembangkan kemampuan kepemimpinan saya</label>
+            <label class="sa-opt"><input type="radio" name="q6" value="2"/> Ingin menambah pengalaman organisasi</label>
+            <label class="sa-opt"><input type="radio" name="q6" value="1"/> Dorongan dari teman atau dosen</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="st">D. Refleksi Diri</div>
+        <div class="fg"><label class="fl">Apa kelebihan terbesar Anda yang mendukung peran sebagai mentor?</label><textarea placeholder="Tuliskan kelebihan Anda secara spesifik..."></textarea></div>
+        <div class="fg"><label class="fl">Apa kelemahan Anda yang perlu diperbaiki untuk menjadi mentor yang baik?</label><textarea placeholder="Tuliskan kelemahan dan rencana perbaikan Anda..."></textarea></div>
+        <div class="fg"><label class="fl">Apa yang akan Anda lakukan jika mentee mengalami kesulitan akademik yang tidak bisa Anda bantu?</label><textarea placeholder="Tuliskan langkah konkret yang akan Anda ambil..."></textarea></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;background:#f0f7ff;border-radius:10px;">
+        <div style="font-size:12px;color:#555;">Hasil akan dikirim otomatis ke dosen pengelola sebagai bahan pertimbangan seleksi.</div>
+        <button class="btn btn-p" onclick="alert('Self Assessment berhasil dikirim! Terima kasih atas kejujuran Anda.')">Kirim Self Assessment</button>
+      </div>
+    </div>
+
+    <!-- M: FEEDBACK -->
+    <div class="page" id="page-m-feedback">
+      <div class="st">Feedback untuk Mentor Saya</div>
+      <div style="font-size:12px;color:#888;margin-bottom:12px;background:#f0f7ff;padding:10px 14px;border-radius:8px;">Berikan penilaian yang jujur dan konstruktif. Feedback Anda sangat membantu peningkatan kualitas program PRO-MENTOR.</div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+          <div class="av av-d" style="width:40px;height:40px;font-size:14px;">SF</div>
+          <div><div style="font-size:14px;font-weight:600;">Siti Fatimah</div><div style="font-size:12px;color:#888;">Mentor Anda · PTIK · Angkatan 2022</div></div>
+        </div>
+
+        <div class="st">Penilaian Bintang per Aspek</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:#555;">Ketersediaan & Responsivitas</span>
+            <div class="star-row" id="sr1">
+              <span class="star on" onclick="setStar('sr1',1)">★</span><span class="star on" onclick="setStar('sr1',2)">★</span><span class="star on" onclick="setStar('sr1',3)">★</span><span class="star on" onclick="setStar('sr1',4)">★</span><span class="star on" onclick="setStar('sr1',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:#555;">Kemampuan Menjelaskan Materi</span>
+            <div class="star-row" id="sr2">
+              <span class="star on" onclick="setStar('sr2',1)">★</span><span class="star on" onclick="setStar('sr2',2)">★</span><span class="star on" onclick="setStar('sr2',3)">★</span><span class="star on" onclick="setStar('sr2',4)">★</span><span class="star" onclick="setStar('sr2',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:#555;">Empati & Dukungan Emosional</span>
+            <div class="star-row" id="sr3">
+              <span class="star on" onclick="setStar('sr3',1)">★</span><span class="star on" onclick="setStar('sr3',2)">★</span><span class="star on" onclick="setStar('sr3',3)">★</span><span class="star on" onclick="setStar('sr3',4)">★</span><span class="star on" onclick="setStar('sr3',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:#555;">Komitmen & Kedisiplinan</span>
+            <div class="star-row" id="sr4">
+              <span class="star on" onclick="setStar('sr4',1)">★</span><span class="star on" onclick="setStar('sr4',2)">★</span><span class="star on" onclick="setStar('sr4',3)">★</span><span class="star on" onclick="setStar('sr4',4)">★</span><span class="star" onclick="setStar('sr4',5)">★</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fg"><label class="fl">Apa yang paling membantu dari sesi mentoring bersama mentor Anda?</label><textarea placeholder="Ceritakan hal positif yang Anda rasakan selama sesi mentoring..."></textarea></div>
+        <div class="fg"><label class="fl">Apa yang perlu ditingkatkan oleh mentor Anda?</label><textarea placeholder="Berikan saran yang konstruktif..."></textarea></div>
+        <div class="fg">
+          <label class="fl">Apakah Anda merekomendasikan mentor ini kepada teman lain?</label>
+          <div style="display:flex;gap:16px;margin-top:6px;">
+            <label class="sa-opt"><input type="radio" name="rek" value="ya" checked/> Ya, sangat merekomendasikan</label>
+            <label class="sa-opt"><input type="radio" name="rek" value="mungkin"/> Mungkin</label>
+            <label class="sa-opt"><input type="radio" name="rek" value="tidak"/> Tidak</label>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="btn btn-p" onclick="alert('Feedback berhasil dikirim! Terima kasih atas penilaian Anda.')">Kirim Feedback</button></div>
+      </div>
+
+      <div class="card">
+        <div class="st">Riwayat Feedback Saya</div>
+        <div class="fb-item"><div class="fb-head"><span class="fb-name">Siti Fatimah</span><span class="fb-date">2 Mei 2026</span></div><div class="fb-stars">★★★★★</div><div class="fb-text" style="margin-top:4px;">Mentor sangat sabar dan selalu membantu saat saya kesulitan memahami materi pemrograman dasar.</div></div>
+        <div class="fb-item"><div class="fb-head"><span class="fb-name">Siti Fatimah</span><span class="fb-date">15 Apr 2026</span></div><div class="fb-stars">★★★★☆</div><div class="fb-text" style="margin-top:4px;">Sesi pertama berjalan dengan baik. Penjelasan mudah dipahami dan komunikatif.</div></div>
+      </div>
+    </div>
+
+    <!-- M: NOTIFIKASI -->
+    <div class="page" id="page-m-notif">
+      <div class="st">Notifikasi</div>
+      <div class="card">
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;"><div class="ndot"></div><div><div style="font-size:13px;color:#1a1a2e;">Self Assessment Anda telah berhasil dikirim dan sedang ditinjau oleh dosen pengelola.</div><div style="font-size:11px;color:#aaa;margin-top:2px;">Hari ini, 09.15</div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;"><div class="ndot"></div><div><div style="font-size:13px;color:#1a1a2e;">Pendaftaran Anda sedang dalam tahap seleksi administrasi. Pantau terus statusnya.</div><div style="font-size:11px;color:#aaa;margin-top:2px;">Kemarin, 08.30</div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;"><div class="ndot read"></div><div><div style="font-size:13px;color:#1a1a2e;">Jangan lupa mengisi Feedback untuk mentor Anda sebelum 10 Juni 2026.</div><div style="font-size:11px;color:#aaa;margin-top:2px;">2 hari lalu</div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;"><div class="ndot read"></div><div><div style="font-size:13px;color:#1a1a2e;">Rekrutmen Mentor PRO-MENTOR 2026 resmi dibuka. Daftarkan diri sebelum 20 Mei 2026.</div><div style="font-size:11px;color:#aaa;margin-top:2px;">5 hari lalu</div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 0;"><div class="ndot read"></div><div><div style="font-size:13px;color:#1a1a2e;">Selamat datang di sistem PRO-MENTOR JTIK UNM. Lengkapi profil Anda untuk memulai.</div><div style="font-size:11px;color:#aaa;margin-top:2px;">7 hari lalu</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="app-footer" class="hidden" style="text-align:center;padding:16px;font-size:11px;color:#aaa;border-top:1px solid #e8eaed;margin-top:20px;">
+  PRO-MENTOR v1.0 · Jurusan Teknik Informatika dan Komputer · Universitas Negeri Makassar · 2026
+</div>
+
+<script>
+var role='';
+function selRole(r){role=r;document.getElementById('rb-d').classList.toggle('selected',r==='dosen');document.getElementById('rb-m').classList.toggle('selected',r==='mahasiswa');document.getElementById('lerr').style.display='none';}
+function doLogin(){
+  if(!role){document.getElementById('lerr').style.display='block';return;}
+  document.getElementById('ls').style.display='none';
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('app-footer').classList.remove('hidden');
+  var av=document.getElementById('nav-av'),nm=document.getElementById('nav-nm'),rb=document.getElementById('nav-rb');
+  if(role==='dosen'){
+    av.textContent='ANR';av.className='av av-d';
+    nm.textContent='Ainun Nida Rifqi, S.Psi., M.Psi.T';
+    rb.textContent='Dosen';rb.className='rb rb-d';
+    document.getElementById('tb-d').style.display='flex';
+    document.getElementById('tb-m').style.display='none';
+    spd('d-home');
+    document.querySelectorAll('#tb-d .tab')[0].classList.add('active');
+  } else {
+    av.textContent='AR';av.className='av av-m';
+    nm.textContent='Ahmad Reza';
+    rb.textContent='Mahasiswa';rb.className='rb rb-m';
+    document.getElementById('tb-m').style.display='flex';
+    document.getElementById('tb-d').style.display='none';
+    spd('m-home');
+    document.querySelectorAll('#tb-m .tab')[0].classList.add('active');
+  }
+}
+function doLogout(){
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('app-footer').classList.add('hidden');
+  document.getElementById('ls').style.display='flex';
+  role='';
+  document.getElementById('rb-d').classList.remove('selected');
+  document.getElementById('rb-m').classList.remove('selected');
+}
+function spd(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));var el=document.getElementById('page-'+id);if(el)el.classList.add('active');}
+function sp(id,tabEl){
+  spd(id);
+  var bar=role==='dosen'?'#tb-d':'#tb-m';
+  document.querySelectorAll(bar+' .tab').forEach(t=>t.classList.remove('active'));
+  if(tabEl)tabEl.classList.add('active');
+}
+function updScore(){
+  var s1=+document.getElementById('s1').value,s2=+document.getElementById('s2').value,s3=+document.getElementById('s3').value,s4=+document.getElementById('s4').value;
+  document.getElementById('v1').textContent=s1;document.getElementById('v2').textContent=s2;
+  document.getElementById('v3').textContent=s3;document.getElementById('v4').textContent=s4;
+  var t=s1+s2+s3+s4;
+  document.getElementById('tscore').textContent=t;
+  document.getElementById('tbar').style.width=t+'%';
+  document.getElementById('tscore').style.color=t>=70?'#185FA5':'#991b1b';
+  document.getElementById('tstatus').textContent=t>=70?'✓ Memenuhi syarat minimum kelulusan (70)':'✗ Tidak memenuhi syarat minimum kelulusan (70)';
+  document.getElementById('tstatus').style.color=t>=70?'#166534':'#991b1b';
+}
+function setStar(rowId,n){document.getElementById(rowId).querySelectorAll('.star').forEach((s,i)=>{s.classList.toggle('on',i<n);});}
+</script>
+</body>
+</html>
