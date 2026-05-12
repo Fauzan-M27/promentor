@@ -41,6 +41,7 @@ class DaftarController extends Controller
             'motivation_letter'     => ['required', 'file', 'mimes:pdf', 'max:2048'],
             'khs'                   => ['required', 'file', 'mimes:pdf', 'max:2048'],
             'sertifikat_organisasi' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
+            'sertifikat_mentoring'  => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
         ]);
 
         // Update profil user dengan data terbaru
@@ -57,10 +58,15 @@ class DaftarController extends Controller
         // Simpan file ke storage
         $motivationPath = $request->file('motivation_letter')->store('pendaftaran/motivation_letters', 'public');
         $khsPath        = $request->file('khs')->store('pendaftaran/khs', 'public');
-        $sertifikatPath = null;
+        $sertifikatPath  = null;
+        $sertMentoringPath = null;
 
         if ($request->hasFile('sertifikat_organisasi')) {
             $sertifikatPath = $request->file('sertifikat_organisasi')->store('pendaftaran/sertifikat', 'public');
+        }
+
+        if ($request->hasFile('sertifikat_mentoring')) {
+            $sertMentoringPath = $request->file('sertifikat_mentoring')->store('pendaftaran/sertifikat_mentoring', 'public');
         }
 
         // Buat record pendaftaran
@@ -70,6 +76,7 @@ class DaftarController extends Controller
             'motivation_letter'     => $motivationPath,
             'khs'                   => $khsPath,
             'sertifikat_organisasi' => $sertifikatPath,
+            'sertifikat_mentoring'  => $sertMentoringPath,
             'ketersediaan_waktu'    => $validated['ketersediaan_waktu'],
             'status'                => 'pending',
             'tahun_ajaran'          => '2026',

@@ -18,6 +18,7 @@ class User extends Authenticatable
         'password',
         'role',
         'nim',
+        'nidn',
         'prodi',
         'semester',
         'ipk',

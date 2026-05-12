@@ -38,4 +38,35 @@ class FeedbackController extends Controller
 
         return view('admin.feedback', compact('stats', 'mentor_list', 'mentor_terbaik', 'komentar_terbaru'));
     }
+
+    public function show(User $mentor)
+    {
+        $feedbacks = Feedback::with('mentee')
+            ->where('mentor_id', $mentor->id)
+            ->latest()
+            ->get()
+            ->map(function ($fb) {
+                return [
+                    'mentee_name'          => $fb->mentee->name ?? '—',
+                    'mentee_nim'           => $fb->mentee->nim  ?? '—',
+                    'rata_rata'            => round($fb->rata_rata, 2),
+                    'bintang_ketersediaan' => $fb->bintang_ketersediaan,
+                    'bintang_penjelasan'   => $fb->bintang_penjelasan,
+                    'bintang_empati'       => $fb->bintang_empati,
+                    'bintang_komitmen'     => $fb->bintang_komitmen,
+                    'hal_positif'          => $fb->hal_positif,
+                    'saran'                => $fb->saran,
+                    'rekomendasi'          => $fb->rekomendasi,
+                    'tanggal'              => $fb->created_at->format('d M Y'),
+                ];
+            });
+
+        return response()->json([
+            'mentor_name'    => $mentor->name,
+            'mentor_nim'     => $mentor->nim,
+            'rata_feedback'  => round($feedbacks->avg('rata_rata'), 2),
+            'total_feedback' => $feedbacks->count(),
+            'feedbacks'      => $feedbacks->values(),
+        ]);
+    }
 }

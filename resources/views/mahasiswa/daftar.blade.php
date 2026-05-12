@@ -130,11 +130,19 @@
             </div>
 
             {{-- Sertifikat Organisasi --}}
-            <div style="margin-bottom:20px;">
+            <div style="margin-bottom:12px;">
                 <label class="pm-label">Sertifikat Organisasi (PDF, Opsional)</label>
                 <div style="font-size:11px;color:#888;margin-bottom:4px;">Unggah Sertifikat Organisasi (Jika ada)</div>
                 <input type="file" name="sertifikat_organisasi" class="pm-input" accept="application/pdf" {{ $sudahDaftar ? 'disabled' : '' }}>
                 @error('sertifikat_organisasi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+            </div>
+
+            {{-- Sertifikat Mentoring --}}
+            <div style="margin-bottom:20px;">
+                <label class="pm-label">Sertifikat Mentoring / Pelatihan (PDF, Opsional)</label>
+                <div style="font-size:11px;color:#888;margin-bottom:4px;">Unggah sertifikat pelatihan atau program mentoring yang pernah diikuti (Jika ada)</div>
+                <input type="file" name="sertifikat_mentoring" class="pm-input" accept="application/pdf" {{ $sudahDaftar ? 'disabled' : '' }}>
+                @error('sertifikat_mentoring')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
             </div>
 
             {{-- SUBMIT --}}

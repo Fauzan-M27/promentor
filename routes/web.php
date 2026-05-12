@@ -96,6 +96,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('/users', \App\Http\Controllers\Admin\UserController::class)
             ->except(['show']);
 
+        // Manajemen Dosen (halaman tersendiri)
+        Route::resource('/dosen', \App\Http\Controllers\Admin\DosenController::class)
+            ->except(['show']);
+
+
         // Fitur yang dipindahkan dari Dosen
         Route::get('/pasangan', [\App\Http\Controllers\Admin\PasanganController::class, 'index'])
             ->name('pasangan');
@@ -106,6 +111,8 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])
             ->name('feedback');
+        Route::get('/feedback/{mentor}', [\App\Http\Controllers\Admin\FeedbackController::class, 'show'])
+            ->name('feedback.show');
 
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])
             ->name('laporan');

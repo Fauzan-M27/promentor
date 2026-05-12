@@ -24,22 +24,32 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
+     * Registrasi umum hanya untuk mahasiswa.
+     * Akun dosen/admin hanya bisa dibuat oleh admin.
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'no_wa'    => ['nullable', 'string', 'max:20'],
+            'name'                  => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password'              => ['required', 'confirmed', Rules\Password::defaults()],
+            'no_wa'                 => ['nullable', 'string', 'max:20'],
+            'nim'                   => ['required', 'string', 'max:20', 'unique:users,nim'],
+            'prodi'                 => ['required', 'in:PTIK,Teknik Komputer'],
+            'semester'              => ['required', 'integer', 'min:1', 'max:8'],
+            'ipk'                   => ['nullable', 'numeric', 'min:0', 'max:4'],
         ]);
 
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'mahasiswa', // Set role default ke mahasiswa
+            'role'     => 'mahasiswa',   // Registrasi umum selalu mahasiswa
             'no_wa'    => $request->no_wa,
+            'nim'      => $request->nim,
+            'prodi'    => $request->prodi,
+            'semester' => $request->semester,
+            'ipk'      => $request->ipk,
         ]);
 
         event(new Registered($user));

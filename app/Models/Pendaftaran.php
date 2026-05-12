@@ -17,6 +17,7 @@ class Pendaftaran extends Model
         'motivation_letter',
         'khs',
         'sertifikat_organisasi',
+        'sertifikat_mentoring',
         'ketersediaan_waktu',
         'status',
         'skor_total',

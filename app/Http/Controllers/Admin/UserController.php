@@ -49,27 +49,31 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
-            'role'     => ['required', 'in:admin,dosen,mahasiswa'],
-            'password' => ['required', Rules\Password::defaults()],
-            'nim'      => ['nullable', 'string', 'max:20', 'unique:users,nim'],
-            'prodi'    => ['nullable', 'string', 'max:100'],
-            'semester' => ['nullable', 'integer', 'min:1', 'max:14'],
-            'ipk'      => ['nullable', 'numeric', 'min:0', 'max:4'],
-            'no_wa'    => ['nullable', 'string', 'max:20'],
+            'name'       => ['required', 'string', 'max:255'],
+            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+            'role'       => ['required', 'in:admin,mahasiswa'],  // Dosen dikelola di DosenController
+            'password'   => ['required', Rules\Password::defaults()],
+            'nim'        => ['nullable', 'string', 'max:20', 'unique:users,nim'],
+            'prodi'      => ['nullable', 'string', 'max:100'],
+            'semester'   => ['nullable', 'integer', 'min:1', 'max:8'],
+            'ipk'        => ['nullable', 'numeric', 'min:0', 'max:4'],
+            'no_wa'      => ['nullable', 'string', 'max:20'],
+            'no_wa_mhs'  => ['nullable', 'string', 'max:20'],
         ]);
+
+        $isMahasiswa = $request->role === 'mahasiswa';
 
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'role'     => $request->role,
-            'nim'      => $request->role === 'mahasiswa' ? $request->nim : null,
-            'prodi'    => $request->role === 'mahasiswa' ? $request->prodi : null,
-            'semester' => $request->role === 'mahasiswa' ? $request->semester : null,
-            'ipk'      => $request->role === 'mahasiswa' ? $request->ipk : null,
-            'no_wa'    => $request->no_wa,
+            'nim'      => $isMahasiswa ? $request->nim : null,
+            'prodi'    => ($isMahasiswa || $isDosen) ? $request->prodi : null,
+            'semester' => $isMahasiswa ? $request->semester : null,
+            'ipk'      => $isMahasiswa ? $request->ipk : null,
+            // Gunakan no_wa dari section mahasiswa jika ada, fallback ke no_wa umum
+            'no_wa'    => $isMahasiswa ? ($request->no_wa_mhs ?: $request->no_wa) : $request->no_wa,
         ]);
 
         return redirect()->route('admin.users.index')
@@ -90,25 +94,27 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'role'     => ['required', 'in:admin,dosen,mahasiswa'],
-            'password' => ['nullable', Rules\Password::defaults()],
-            'nim'      => ['nullable', 'string', 'max:20', 'unique:users,nim,' . $user->id],
-            'prodi'    => ['nullable', 'string', 'max:100'],
-            'semester' => ['nullable', 'integer', 'min:1', 'max:14'],
-            'ipk'      => ['nullable', 'numeric', 'min:0', 'max:4'],
-            'no_wa'    => ['nullable', 'string', 'max:20'],
+            'name'      => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'role'      => ['required', 'in:admin,mahasiswa'],  // Dosen dikelola di DosenController
+            'password'  => ['nullable', Rules\Password::defaults()],
+            'nim'       => ['nullable', 'string', 'max:20', 'unique:users,nim,' . $user->id],
+            'prodi'     => ['nullable', 'string', 'max:100'],
+            'semester'  => ['nullable', 'integer', 'min:1', 'max:8'],
+            'ipk'       => ['nullable', 'numeric', 'min:0', 'max:4'],
+            'no_wa'     => ['nullable', 'string', 'max:20'],
         ]);
+
+        $isMahasiswa = $request->role === 'mahasiswa';
 
         $data = [
             'name'     => $request->name,
             'email'    => $request->email,
             'role'     => $request->role,
-            'nim'      => $request->role === 'mahasiswa' ? $request->nim : null,
-            'prodi'    => $request->role === 'mahasiswa' ? $request->prodi : null,
-            'semester' => $request->role === 'mahasiswa' ? $request->semester : null,
-            'ipk'      => $request->role === 'mahasiswa' ? $request->ipk : null,
+            'nim'      => $isMahasiswa ? $request->nim : null,
+            'prodi'    => $isMahasiswa ? $request->prodi : null,
+            'semester' => $isMahasiswa ? $request->semester : null,
+            'ipk'      => $isMahasiswa ? $request->ipk : null,
             'no_wa'    => $request->no_wa,
         ];
 

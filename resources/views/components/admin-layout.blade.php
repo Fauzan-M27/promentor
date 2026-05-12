@@ -287,7 +287,7 @@
     
     {{-- Sisi Dosen with Sub-menu --}}
     @php
-        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*']);
+        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*', 'admin.dosen*']);
     @endphp
     
     <div class="adm-nav-group {{ $isDosenActive ? 'expanded' : '' }}">
@@ -297,6 +297,9 @@
             <i data-lucide="chevron-right" class="group-arrow"></i>
         </a>
         <div class="adm-sub-nav">
+            <a href="{{ route('admin.dosen.index') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.dosen*') ? 'active' : '' }}">
+                Manajemen Dosen
+            </a>
             <a href="{{ route('admin.pasangan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
                 Pasangan Mentor
             </a>
@@ -321,12 +324,17 @@
                 <div class="adm-user-role">Administrator</div>
             </div>
         </div>
-        <form method="POST" action="{{ route('logout') }}" style="margin-top:8px;">
-            @csrf
-            <button type="submit" class="adm-logout-btn" style="width:100%; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
-                <i data-lucide="log-out" style="width:13px;height:13px;"></i> Logout
-            </button>
-        </form>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+            <a href="{{ route('profile.edit') }}" class="adm-logout-btn" style="flex:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i data-lucide="user-cog" style="width:13px;height:13px;"></i> Profil
+            </a>
+            <form method="POST" action="{{ route('logout') }}" style="flex:1;margin:0;">
+                @csrf
+                <button type="submit" class="adm-logout-btn" style="width:100%; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; color:#991b1b; background:#fee2e2; border-color:#fca5a5;">
+                    <i data-lucide="log-out" style="width:13px;height:13px;"></i> Keluar
+                </button>
+            </form>
+        </div>
     </div>
 </aside>
 

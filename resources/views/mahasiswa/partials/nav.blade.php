@@ -14,6 +14,7 @@
                 </div>
             </div>
 
+            <a href="{{ route('profile.edit') }}" style="font-size:12px;font-weight:600;color:#185FA5;text-decoration:none;margin-right:12px;">Profil Saya</a>
             <form method="POST" action="{{ route('logout') }}" style="margin:0;">
                 @csrf
                 <button type="submit" class="pm-btn">Keluar</button>

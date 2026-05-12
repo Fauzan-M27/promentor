@@ -258,7 +258,7 @@
 
     {{-- Sisi Dosen with Sub-menu --}}
     @php
-        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*']);
+        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*', 'admin.dosen*']);
     @endphp
     
     <div class="adm-nav-group {{ $isDosenActive ? 'expanded' : '' }}">
@@ -268,6 +268,9 @@
             <span class="group-arrow">▶</span>
         </a>
         <div class="adm-sub-nav">
+            <a href="{{ route('admin.dosen.index') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.dosen*') ? 'active' : '' }}">
+                Manajemen Dosen
+            </a>
             <a href="{{ route('admin.pasangan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
                 Pasangan Mentor
             </a>
@@ -291,12 +294,17 @@
                 <div class="adm-user-role">Administrator</div>
             </div>
         </div>
-        <form method="POST" action="{{ route('logout') }}" style="margin-top:8px;">
-            @csrf
-            <button type="submit" class="adm-logout-btn" style="width:100%; text-align:center;">
-                🚪 Logout
-            </button>
-        </form>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+            <a href="{{ route('profile.edit') }}" class="adm-logout-btn" style="flex:1;text-align:center;">
+                ⚙️ Profil
+            </a>
+            <form method="POST" action="{{ route('logout') }}" style="flex:1;margin:0;">
+                @csrf
+                <button type="submit" class="adm-logout-btn" style="width:100%; text-align:center; color:#991b1b; background:#fee2e2; border-color:#fca5a5;">
+                    🚪 Keluar
+                </button>
+            </form>
+        </div>
     </div>
 </aside>
 
