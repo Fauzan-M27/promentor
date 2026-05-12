@@ -170,6 +170,11 @@ body {
     background: #fff;
     overflow-x: auto;
     padding: 0 24px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.pm-tab-bar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 .pm-tab {
     font-size: 13px;
@@ -200,8 +205,45 @@ body {
     top: 0;
     z-index: 100;
 }
-.pm-nav-logo { font-size: 16px; font-weight: 700; color: var(--pm-dark); }
+.pm-nav-logo { font-size: 14px; font-weight: 800; color: var(--pm-dark); line-height: 1.1; text-transform: uppercase; }
 .pm-nav-logo span { color: var(--pm-blue); }
+
+.pm-nav-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pm-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: none;
+    vertical-align: middle;
+}
+
+.pm-nav-left { display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; }
+.pm-nav-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.pm-nav-info { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+.pm-nav-badges { display: flex; gap: 6px; align-items: center; }
+
+@media (max-width: 768px) {
+    .pm-nav-left { gap: 10px; }
+    .pm-nav-logo br { display: block; }
+    .pm-nav-badges { flex-direction: column; gap: 2px; align-items: flex-end; }
+    .pm-nav-logo span:last-child { display: none; }
+    .pm-nav-info { gap: 6px; }
+    .pm-nav-name { max-width: 80px; font-size: 12px; }
+    .badge { font-size: 9px !important; padding: 2px 6px; }
+    
+    .pm-nav { padding: 8px 12px; }
+    .pm-btn { padding: 4px 8px; font-size: 10px; }
+}
+
+@media (min-width: 769px) {
+    .pm-nav-logo br { display: none; }
+    .pm-nav-logo { font-size: 16px; }
+    .pm-nav-badges { flex-direction: row; gap: 8px; align-items: center; }
+}
 
 /* === LOGIN === */
 .pm-login-wrap {
@@ -254,11 +296,87 @@ body {
 }
 .pm-role-icon { font-size: 28px; margin-bottom: 6px; display: block; }
 
-/* === RESPONSIVE === */
-@media (max-width: 600px) {
-    .pm-stat-grid { grid-template-columns: 1fr 1fr; }
+/* === INFO CARDS (MENTOR/MENTEE) === */
+.pm-info-card {
+    grid-column: span 3;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--pm-border);
+    position: relative;
+    overflow: hidden;
 }
+.pm-info-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+}
+.pm-info-card-mentor { background: linear-gradient(135deg, #fff 0%, #f0f7ff 100%); }
+.pm-info-card-mentor::before { background: var(--pm-blue); }
+.pm-info-card-mentee { background: linear-gradient(135deg, #fff 0%, #f0fff4 100%); }
+.pm-info-card-mentee::before { background: var(--pm-success); }
+
+.pm-info-card-content { flex: 1; overflow: hidden; }
+.pm-info-card-label { 
+    font-size: 11px; font-weight: 700; text-transform: uppercase; 
+    letter-spacing: 1px; margin-bottom: 4px; display: block; 
+}
+.pm-info-card-title { font-size: 20px; font-weight: 700; color: var(--pm-dark); margin-bottom: 6px; }
+.pm-info-card-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+.pm-info-card-meta span { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--pm-text); }
+.pm-info-card-meta i { color: var(--pm-text-sm); }
+
+.pm-mentee-list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 8px; margin-top: 4px; }
+.pm-mentee-item {
+    flex-shrink: 0; padding: 4px 0; 
+    min-width: 140px;
+    border-right: 1px solid rgba(0,0,0,.05);
+}
+.pm-mentee-item:last-child { border-right: none; }
+
+/* === RESPONSIVE UTILITIES === */
+.pm-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pm-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.pm-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.pm-container {
+    padding: 20px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* === RESPONSIVE === */
 @media (max-width: 768px) {
+    .pm-container { padding: 16px 16px; }
+    .pm-grid-2, .pm-grid-3, .pm-grid-4 { grid-template-columns: 1fr !important; }
+    .pm-stat-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
     .pm-tab-bar { padding: 0 12px; }
-    .pm-nav     { padding: 10px 16px; }
+    .pm-nav { padding: 10px 16px; }
+    .pm-nav-logo span:last-child { display: none; } /* Sembunyikan JTIK UNM di HP */
+    
+    /* Horizontal scroll for tabs if too many */
+    .pm-tab-bar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .pm-tab { padding: 10px 12px; }
+
+    /* Fix stats cards height on mobile */
+    .pm-stat-value { font-size: 18px; }
+    
+    /* Ensure span-3 cards take full width on mobile */
+    .pm-stat-card[style*="grid-column: span 3"], .pm-info-card {
+        grid-column: 1 / -1 !important;
+    }
+
+    .pm-info-card { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .pm-info-card-title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+    .pm-stat-grid { grid-template-columns: 1fr !important; }
 }

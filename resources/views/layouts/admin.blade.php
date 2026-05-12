@@ -17,7 +17,8 @@
             --adm-accent-light: #dbeafe;
             --adm-text-muted: #94a3b8;
         }
-        body { margin: 0; display: flex; min-height: 100vh; background: #f1f5f9; }
+        body { margin: 0; display: flex; min-height: 100vh; background: #f1f5f9; overflow-x: hidden; width: 100%; position: relative; }
+        html { overflow-x: hidden; width: 100%; }
 
         /* SIDEBAR */
         .adm-sidebar {
@@ -48,6 +49,38 @@
         .adm-nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
         .adm-nav-item.active { background: var(--adm-accent); color: #fff; }
         .adm-nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+        /* SUB-NAV STYLES */
+        .adm-nav-group { position: relative; }
+        .adm-sub-nav { 
+            display: none; 
+            flex-direction: column; 
+            padding-left: 28px; 
+            margin-bottom: 8px;
+        }
+        .adm-nav-group.expanded .adm-sub-nav { display: flex; }
+        .adm-sub-nav-item {
+            padding: 6px 16px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all .15s;
+            border-radius: 6px;
+            margin: 1px 8px;
+            display: flex;
+            align-items: center;
+        }
+        .adm-sub-nav-item:hover { color: #fff; background: rgba(255,255,255,.05); }
+        .adm-sub-nav-item.active { color: #60a5fa; font-weight: 600; }
+        
+        .group-arrow { 
+            margin-left: auto; 
+            font-size: 10px;
+            transition: transform .2s;
+            color: var(--adm-text-muted);
+        }
+        .adm-nav-group.expanded .group-arrow { transform: rotate(90deg); }
+
         .adm-sidebar-footer {
             margin-top: auto;
             padding: 14px 12px;
@@ -74,6 +107,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
         }
         .adm-topbar {
             background: #fff;
@@ -165,20 +201,45 @@
             background:#fff; display:inline-block;
         }
         .adm-pagination .active { background:var(--adm-accent); color:#fff; border-color:var(--adm-accent); }
+        .mobile-only { display: none; }
 
         @media(max-width:768px){
+            :root { --adm-sidebar-w: 0px; }
+            .adm-sidebar {
+                transform: translateX(-100%);
+                transition: transform .3s ease;
+                width: 240px;
+            }
+            .adm-sidebar.open { transform: translateX(0); }
+            .adm-main { margin-left: 0; }
             .adm-stat-grid { grid-template-columns:1fr 1fr; }
             .adm-form-grid-2 { grid-template-columns:1fr; }
+            .adm-content { padding: 80px 16px 16px; width: 100%; box-sizing: border-box; }
+            .mobile-only { display: flex; }
+            .adm-table-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table.adm-table { min-width: 700px; }
+            .adm-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 64px; }
+            .adm-stat-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+            .adm-stat-card { padding: 10px 4px !important; text-align: center; }
+            .adm-stat-icon { width: 28px !important; height: 28px !important; margin: 0 auto 6px !important; }
+            .adm-stat-icon svg { width: 14px !important; height: 14px !important; }
+            .adm-stat-val { font-size: 15px !important; letter-spacing: -0.5px; }
+            .adm-stat-lbl { font-size: 8px !important; text-transform: uppercase; font-weight: 600; margin-top: 2px; }
         }
     </style>
 </head>
 <body>
 
 {{-- SIDEBAR --}}
-<aside class="adm-sidebar">
-    <div class="adm-sidebar-logo">
-        <div class="brand">PRO<span>-MENTOR</span></div>
-        <div class="sub">Admin Panel</div>
+<aside class="adm-sidebar" id="sidebar">
+    <div class="adm-sidebar-logo" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <div class="brand" style="line-height:1;">PRO-<br><span>MENTOR</span></div>
+            <div class="sub">Admin Panel</div>
+        </div>
+        <button onclick="toggleSidebar()" class="mobile-only" style="background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; align-items:center; justify-content:center; cursor:pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
     </div>
 
     <div class="adm-nav-section">Menu</div>
@@ -192,19 +253,41 @@
         <span class="icon">👥</span> Kelola User
     </a>
 
-    <div class="adm-nav-section">Sistem</div>
-    <a href="{{ route('dosen.beranda') }}" class="adm-nav-item" target="_blank">
-        <span class="icon">🎓</span> Lihat Sisi Dosen
-    </a>
+
+    <div class="adm-nav-section">Akses Cepat</div>
+
+    {{-- Sisi Dosen with Sub-menu --}}
+    @php
+        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*']);
+    @endphp
+    
+    <div class="adm-nav-group {{ $isDosenActive ? 'expanded' : '' }}">
+        <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('expanded')" class="adm-nav-item {{ $isDosenActive ? 'active' : '' }}">
+            <span class="icon">🎓</span> 
+            <span>Sisi Dosen</span>
+            <span class="group-arrow">▶</span>
+        </a>
+        <div class="adm-sub-nav">
+            <a href="{{ route('admin.pasangan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
+                Pasangan Mentor
+            </a>
+            <a href="{{ route('admin.feedback') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.feedback*') ? 'active' : '' }}">
+                Feedback Mentor
+            </a>
+            <a href="{{ route('admin.laporan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.laporan*') ? 'active' : '' }}">
+                Laporan & Analitik
+            </a>
+        </div>
+    </div>
+
     <a href="{{ route('mahasiswa.beranda') }}" class="adm-nav-item" target="_blank">
-        <span class="icon">👤</span> Lihat Sisi Mahasiswa
+        <span class="icon">👤</span> Sisi Mahasiswa
     </a>
 
     <div class="adm-sidebar-footer">
-        <div class="adm-user-chip">
-            <div class="adm-user-av">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
-            <div>
-                <div class="adm-user-name">{{ auth()->user()->name }}</div>
+        <div class="adm-user-chip" style="padding: 10px 14px; overflow: hidden;">
+            <div style="overflow: hidden;">
+                <div class="adm-user-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">{{ auth()->user()->name }}</div>
                 <div class="adm-user-role">Administrator</div>
             </div>
         </div>
@@ -220,9 +303,14 @@
 {{-- MAIN --}}
 <div class="adm-main">
     <div class="adm-topbar">
-        <div class="adm-topbar-title">{{ $pageTitle ?? 'Admin Panel' }}</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <button onclick="toggleSidebar()" class="mobile-only" id="hamburger" style="background:var(--adm-accent-light); border:none; color:var(--adm-accent); width:40px; height:40px; border-radius:10px; align-items:center; justify-content:center; cursor:pointer; padding:0; transition: all 0.2s;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <div class="adm-topbar-title">{{ $pageTitle ?? 'Admin Panel' }}</div>
+        </div>
         <div class="adm-topbar-right">
-            <span style="font-size:12px; color:#64748b;">{{ now()->format('d M Y') }}</span>
+            <span style="font-size:12px; color:#64748b; display:none; @media(min-width:600px){display:inline;}">{{ now()->format('d M Y') }}</span>
         </div>
     </div>
 
@@ -230,6 +318,24 @@
         {{ $slot }}
     </div>
 </div>
+
+<script>
+    function toggleSidebar() {
+        if (window.innerWidth > 768) return;
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+    // Close sidebar on click outside on mobile
+    document.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.getElementById('hamburger');
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(event.target) && 
+            !hamburger.contains(event.target) && 
+            sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+        }
+    });
+</script>
 
 </body>
 </html>

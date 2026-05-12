@@ -10,33 +10,75 @@
 <body>
 @include('mahasiswa.partials.nav')
 
-<div style="padding:20px 24px;max-width:960px;margin:0 auto;">
+<div class="pm-container">
 
     {{-- STAT CARDS --}}
     <div class="pm-stat-grid" style="margin-bottom:16px;">
-        <div class="pm-stat-card">
-            <div class="pm-stat-label">Status Saya</div>
-            @if($pendaftaran)
+        @if($pendaftaran && $pendaftaran->status === 'diterima')
+            {{-- MENTEE CARD (Untuk user yang sudah LOLOS jadi mentor) --}}
+            <div class="pm-info-card pm-info-card-mentee">
+                @if($mentees->count() > 0)
+                    <div class="pm-info-card-content">
+                        <span class="pm-info-card-label" style="color: var(--pm-success);">Mentee Saya</span>
+                        <div class="pm-mentee-list">
+                            @foreach($mentees as $m)
+                                <div class="pm-mentee-item" style="min-width: 120px;">
+                                    <div style="font-size: 13px; font-weight: 700;">{{ $m->name }}</div>
+                                    <div style="font-size: 11px; color: var(--pm-blue); font-weight: 600; margin-top: 2px;"> {{ $m->no_wa }}
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="pm-info-card-content">
+                        <span class="pm-info-card-label">Mentee Saya</span>
+                        <div class="pm-info-card-title" style="color: #94a3b8; font-size: 16px;">Belum ada mentee yang dipasangkan</div>
+                    </div>
+                @endif
+            </div>
+        @elseif($is_registrasi_selesai)
+            {{-- MODE PELAMAR: Tampilkan 3 statistik --}}
+            <div class="pm-stat-card">
+                <div class="pm-stat-label">Status Saya</div>
                 @php $warna=match($pendaftaran->status){'diterima'=>'#166534','ditolak'=>'#991b1b','review'=>'#1e40af',default=>'#92400e'}; @endphp
                 <div class="pm-stat-value" style="font-size:16px;color:{{ $warna }}">{{ ucfirst($pendaftaran->status) }}</div>
                 <div class="pm-stat-sub">Menunggu review</div>
-            @else
-                <div class="pm-stat-value" style="font-size:14px;color:#aaa">Belum Daftar</div>
-                <div class="pm-stat-sub">Segera daftar</div>
-            @endif
-        </div>
-        <div class="pm-stat-card">
-            <div class="pm-stat-label">Skor Saya</div>
-            <div class="pm-stat-value">{{ $pendaftaran?->skor_total ?? '—' }}</div>
-            <div class="pm-stat-sub">Dari 100 poin</div>
-        </div>
-        <div class="pm-stat-card">
-            <div class="pm-stat-label">Self Assessment</div>
-            <div class="pm-stat-value" style="font-size:14px;color:{{ $user->selfAssessment ? '#166534' : '#92400e' }}">
-                {{ $user->selfAssessment ? 'Selesai' : 'Belum' }}
             </div>
-            <div class="pm-stat-sub">{{ $user->selfAssessment ? $user->selfAssessment->created_at->format('j M Y') : 'Perlu diisi' }}</div>
-        </div>
+            <div class="pm-stat-card">
+                <div class="pm-stat-label">Skor Saya</div>
+                <div class="pm-stat-value">{{ $pendaftaran?->skor_total ?? '—' }}</div>
+                <div class="pm-stat-sub">Dari 100 poin</div>
+            </div>
+            <div class="pm-stat-card">
+                <div class="pm-stat-label">Self Assessment</div>
+                <div class="pm-stat-value" style="font-size:14px;color:{{ $user->selfAssessment ? '#166534' : '#92400e' }}">
+                    {{ $user->selfAssessment ? 'Selesai' : 'Belum' }}
+                </div>
+                <div class="pm-stat-sub">{{ $user->selfAssessment ? $user->selfAssessment->created_at->format('j M Y') : 'Perlu diisi' }}</div>
+            </div>
+        @else
+            {{-- MODE MENTEE (Default): Tampilkan Mentor Saya --}}
+            <div class="pm-info-card pm-info-card-mentor">
+                @if($mentor)
+                    <div class="pm-info-card-content">
+                        <span class="pm-info-card-label" style="color: var(--pm-blue);">Mentor Saya</span>
+                        <div class="pm-info-card-title">{{ $mentor->name }}</div>
+                        <div class="pm-info-card-meta">
+                            <span><i data-lucide="hash" style="width: 14px; height: 14px;"></i> {{ $mentor->nim }}</span>
+                            <span><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Sem. {{ $mentor->semester }}</span>
+                            <span><i data-lucide="phone" style="width: 14px; height: 14px;"></i> {{ $mentor->no_wa }}</span>
+                        </div>
+                    </div>
+                @else
+                    <div class="pm-info-card-content">
+                        <span class="pm-info-card-label">Mentor Saya</span>
+                        <div class="pm-info-card-title" style="color: #94a3b8; font-size: 16px;">Anda belum dipasangkan dengan mentor</div>
+                    </div>
+                @endif
+            </div>
+        @endif
+
         <div class="pm-stat-card">
             <div class="pm-stat-label">Feedback Dikirim</div>
             <div class="pm-stat-value">{{ $feedback_count }}</div>
@@ -45,7 +87,7 @@
     </div>
 
     {{-- DUA KOLOM --}}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <div class="pm-grid-2" style="margin-bottom:16px;">
 
         {{-- KIRI: STATUS PENDAFTARAN --}}
         <div>
@@ -58,7 +100,7 @@
                         <span class="badge {{ $bc }}">{{ ucfirst($pendaftaran->status) }}</span>
                     </div>
                     <div style="font-size:12px;color:#888;margin-bottom:12px;">
-                        Berkas sedang dalam tahap seleksi administrasi oleh dosen pengelola.
+                        {{ $pendaftaran->status === 'diterima' ? 'Selamat! Anda telah resmi menjadi mentor PRO-MENTOR.' : 'Berkas sedang dalam tahap seleksi administrasi oleh dosen pengelola.' }}
                     </div>
                     {{-- PROGRESS STEPS --}}
                     <div style="display:flex;gap:6px;">
@@ -84,7 +126,7 @@
                     <div style="text-align:center;padding:20px 0;display:flex;flex-direction:column;align-items:center;">
                         <i data-lucide="clipboard-list" style="width:36px;height:36px;color:#cbd5e1;margin-bottom:12px;"></i>
                         <div style="font-size:13px;color:#888;margin-bottom:12px;">Anda belum mendaftar sebagai calon mentor.</div>
-                        <a href="{{ route('mahasiswa.daftar.create') }}" class="pm-btn pm-btn-primary" style="text-decoration:none;font-size:13px;">Daftar Sekarang</a>
+                        <a href="{{ route('mahasiswa.daftar.create') }}" class="pm-btn pm-btn-primary" style="text-decoration:none;font-size:13px;">Daftar Jadi Mentor</a>
                     </div>
                 @endif
             </div>
@@ -93,10 +135,14 @@
         {{-- KANAN: AKSI CEPAT --}}
         <div>
             <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Aksi Cepat</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <a href="{{ route('mahasiswa.self-assessment.create') }}" class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Self Assessment</a>
+            <div class="pm-grid-2" style="gap:8px;">
+                @if($pendaftaran)
+                    <a href="{{ route('mahasiswa.self-assessment.create') }}" class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Self Assessment</a>
+                @endif
                 <a href="{{ route('mahasiswa.feedback.create') }}"        class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Beri Feedback</a>
-                <a href="{{ route('mahasiswa.seleksi') }}"                class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Status Seleksi</a>
+                @if($user->selfAssessment)
+                    <a href="{{ route('mahasiswa.seleksi') }}"                class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Status Seleksi</a>
+                @endif
                 <a href="{{ route('mahasiswa.notifikasi') }}"             class="pm-btn pm-btn-primary" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Notifikasi</a>
             </div>
         </div>

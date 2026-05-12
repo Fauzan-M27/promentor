@@ -35,20 +35,14 @@ Route::middleware(['auth', 'role:dosen'])
         Route::patch('/seleksi/{pendaftaran}/status', [\App\Http\Controllers\Dosen\SeleksiController::class, 'updateStatus'])
             ->name('seleksi.status');
 
-        Route::get('/pasangan', [\App\Http\Controllers\Dosen\PasanganController::class, 'index'])
-            ->name('pasangan');
-        Route::post('/pasangan', [\App\Http\Controllers\Dosen\PasanganController::class, 'store'])
-            ->name('pasangan.store');
-        Route::patch('/pasangan/{pasangan}/status', [\App\Http\Controllers\Dosen\PasanganController::class, 'updateStatus'])
-            ->name('pasangan.status');
 
-        Route::get('/feedback', [\App\Http\Controllers\Dosen\FeedbackController::class, 'index'])
-            ->name('feedback');
 
-        Route::get('/laporan', [\App\Http\Controllers\Dosen\LaporanController::class, 'index'])
-            ->name('laporan');
-        Route::get('/laporan/export', [\App\Http\Controllers\Dosen\LaporanController::class, 'export'])
-            ->name('laporan.export');
+        Route::get('/notifikasi', [\App\Http\Controllers\Dosen\NotifikasiController::class, 'index'])
+            ->name('notifikasi');
+        Route::post('/notifikasi/{notifikasi}/baca', [\App\Http\Controllers\Dosen\NotifikasiController::class, 'tandaiBaca'])
+            ->name('notifikasi.baca');
+        Route::post('/notifikasi/baca-semua', [\App\Http\Controllers\Dosen\NotifikasiController::class, 'bacaSemua'])
+            ->name('notifikasi.baca-semua');
     });
 
 // ============================================================
@@ -101,6 +95,22 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::resource('/users', \App\Http\Controllers\Admin\UserController::class)
             ->except(['show']);
+
+        // Fitur yang dipindahkan dari Dosen
+        Route::get('/pasangan', [\App\Http\Controllers\Admin\PasanganController::class, 'index'])
+            ->name('pasangan');
+        Route::post('/pasangan', [\App\Http\Controllers\Admin\PasanganController::class, 'store'])
+            ->name('pasangan.store');
+        Route::patch('/pasangan/{pasangan}/status', [\App\Http\Controllers\Admin\PasanganController::class, 'updateStatus'])
+            ->name('pasangan.status');
+
+        Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])
+            ->name('feedback');
+
+        Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])
+            ->name('laporan');
+        Route::get('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])
+            ->name('laporan.export');
     });
 
 // ============================================================
@@ -113,3 +123,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Fallback logout GET (mencegah MethodNotAllowedHttpException)
+Route::get('/logout', function () {
+    auth()->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+});

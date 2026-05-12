@@ -18,11 +18,11 @@ class RoleMiddleware
             return redirect()->route('login');
         }
 
+        if (auth()->user()->isAdmin()) {
+            return $next($request);
+        }
+
         if (!in_array(auth()->user()->role, $roles)) {
-            // Admin selalu bisa mengakses semua halaman admin
-            if (auth()->user()->isAdmin() && in_array('admin', $roles)) {
-                return $next($request);
-            }
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 

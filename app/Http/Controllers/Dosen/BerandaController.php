@@ -15,7 +15,6 @@ class BerandaController extends Controller
             'total_pendaftar'  => Pendaftaran::where('tahun_ajaran', '2026')->count(),
             'dalam_seleksi'    => Pendaftaran::whereIn('status', ['pending', 'review'])->count(),
             'diterima'         => Pendaftaran::where('status', 'diterima')->count(),
-            'rata_feedback'    => round(Feedback::avg('rata_rata') ?? 0, 1),
         ];
 
         $pendaftar_terbaru = Pendaftaran::with('mahasiswa')

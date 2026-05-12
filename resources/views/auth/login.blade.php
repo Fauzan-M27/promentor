@@ -84,17 +84,6 @@
                 Belum punya akun? <a href="{{ route('register') }}" style="color:#185FA5; text-decoration:none; font-weight:500;">Daftar di sini</a>
             </div>
         </form>
-
-
-        {{-- DEMO LOGIN INFO --}}
-        <div style="margin-top:18px; padding:12px 14px; background:#f0f7ff; border-radius:8px; font-size:12px; color:#555; line-height:1.7;">
-            <div style="font-weight:600; color:#1e40af; margin-bottom:4px;">Demo Login:</div>
-            <div>Dosen &rarr; masuk sebagai <strong>Ainun Nida Rifqi</strong></div>
-            <div style="font-size:11px; color:#888; margin-top:1px;">ainun@jtik.unm.ac.id / password</div>
-            <div style="margin-top:6px;">Mahasiswa &rarr; masuk sebagai <strong>Ahmad Reza</strong></div>
-            <div style="font-size:11px; color:#888; margin-top:1px;">ahmad@mhs.unm.ac.id / password</div>
-        </div>
-
     </div>
 </div>
 </x-guest-layout>

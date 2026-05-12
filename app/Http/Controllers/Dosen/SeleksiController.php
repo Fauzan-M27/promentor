@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dosen;
 use App\Http\Controllers\Controller;
 use App\Models\Pendaftaran;
 use App\Models\Penilaian;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 
 class SeleksiController extends Controller
@@ -56,6 +57,15 @@ class SeleksiController extends Controller
             'status'        => $request->status,
             'catatan_dosen' => $request->catatan_dosen,
         ]);
+
+        // Kirim notifikasi ke mahasiswa terkait
+        $judul = $request->status === 'diterima' ? 'Selamat! Seleksi Mentor Berhasil' : 'Informasi Seleksi Mentor';
+        $pesan = $request->status === 'diterima' 
+            ? "Selamat! Anda dinyatakan LULUS seleksi menjadi mentor PRO-MENTOR. Silakan tunggu informasi selanjutnya terkait pemasangan mentee."
+            : "Mohon maaf, Anda belum lulus seleksi mentor untuk periode ini. Tetap semangat!";
+        $tipe  = $request->status === 'diterima' ? 'sukses' : 'peringatan';
+
+        Notifikasi::send($pendaftaran->user_id, $judul, $pesan, $tipe);
 
         $label = $request->status === 'diterima' ? 'diterima' : 'ditolak';
         return back()->with('success', "Kandidat berhasil {$label}.");

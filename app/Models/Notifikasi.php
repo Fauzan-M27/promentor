@@ -39,4 +39,15 @@ class Notifikasi extends Model
     {
         return $query->where('dibaca', false);
     }
+
+    // Helper static untuk mengirim notifikasi
+    public static function send($userId, $judul, $pesan, $tipe = 'info')
+    {
+        return self::create([
+            'user_id' => $userId,
+            'judul'   => $judul,
+            'pesan'   => $pesan,
+            'tipe'    => $tipe,
+        ]);
+    }
 }

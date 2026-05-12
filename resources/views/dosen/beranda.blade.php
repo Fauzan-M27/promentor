@@ -11,7 +11,7 @@
 <body>
 @include('dosen.partials.nav')
 
-<div style="padding:20px 24px;max-width:960px;margin:0 auto;">
+<div class="pm-container">
 
     {{-- STAT CARDS --}}
     <div class="pm-stat-grid">
@@ -30,14 +30,10 @@
             <div class="pm-stat-value" style="color:#166534;">{{ $stats['diterima'] }}</div>
             <div class="pm-stat-sub">Aktif</div>
         </div>
-        <div class="pm-stat-card">
-            <div class="pm-stat-label">Rata-rata Feedback</div>
-            <div class="pm-stat-value" style="color:#f59e0b;">{{ $stats['rata_feedback'] }}</div>
-            <div class="pm-stat-sub">dari 5 bintang</div>
-        </div>
+
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div class="pm-grid-2">
 
         {{-- KIRI --}}
         <div>
@@ -106,11 +102,10 @@
             </div>
 
             {{-- QUICK ACTIONS --}}
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <a href="{{ route('dosen.pendaftar') }}" class="pm-btn" style="font-size:12px;text-align:center;text-decoration:none;padding:10px;">Lihat Semua Pendaftar</a>
+            <div class="pm-grid-2" style="gap:8px;">
+                <a href="{{ route('dosen.pendaftar') }}" class="pm-btn" style="font-size:12px;text-align:center;text-decoration:none;padding:10px;">Lihat Pendaftar</a>
                 <a href="{{ route('dosen.pendaftar') }}?status=pending" class="pm-btn pm-btn-primary" style="font-size:12px;text-align:center;text-decoration:none;padding:10px;">Mulai Seleksi</a>
-                <a href="{{ route('dosen.feedback') }}"  class="pm-btn" style="font-size:12px;text-align:center;text-decoration:none;padding:10px;">Rekap Feedback</a>
-                <a href="{{ route('dosen.laporan') }}"   class="pm-btn" style="font-size:12px;text-align:center;text-decoration:none;padding:10px;">Unduh Laporan</a>
+
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dosen;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pendaftaran;
@@ -33,7 +33,7 @@ class LaporanController extends Controller
 
         $total_prodi = $prodi_rekap->sum('total') ?: 1;
 
-        return view('dosen.laporan', compact('stats', 'distribusi', 'max_dist', 'prodi_rekap', 'total_prodi'));
+        return view('admin.laporan', compact('stats', 'distribusi', 'max_dist', 'prodi_rekap', 'total_prodi'));
     }
 
     public function export()
@@ -103,6 +103,6 @@ class LaporanController extends Controller
 
         $pendaftar = Pendaftaran::with('mahasiswa')->where('tahun_ajaran', '2026')->get();
 
-        return view('dosen.laporan-print', compact('stats', 'pendaftar'));
+        return view('admin.laporan-print', compact('stats', 'pendaftar'));
     }
 }

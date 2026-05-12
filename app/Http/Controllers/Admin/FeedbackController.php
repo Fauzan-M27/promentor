@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dosen;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
@@ -36,6 +36,6 @@ class FeedbackController extends Controller
             ->take(5)
             ->get();
 
-        return view('dosen.feedback', compact('stats', 'mentor_list', 'mentor_terbaik', 'komentar_terbaru'));
+        return view('admin.feedback', compact('stats', 'mentor_list', 'mentor_terbaik', 'komentar_terbaru'));
     }
 }

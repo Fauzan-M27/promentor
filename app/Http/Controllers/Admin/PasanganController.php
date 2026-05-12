@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Dosen;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pasangan;
 use App\Models\User;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 
 class PasanganController extends Controller
@@ -42,7 +43,7 @@ class PasanganController extends Controller
             ->groupBy('mentor_id')
             ->pluck('jumlah', 'mentor_id');
 
-        return view('dosen.pasangan', compact(
+        return view('admin.pasangan', compact(
             'semua_pasangan', 'pasangan_grouped', 'mentor_tersedia', 'mentee_tersedia', 'mentee_per_mentor'
         ));
     }
@@ -64,13 +65,32 @@ class PasanganController extends Controller
             return back()->withErrors(['mentee_id' => 'Pasangan ini sudah ada.']);
         }
 
-        Pasangan::create([
+        $pasangan = Pasangan::create([
             'mentor_id'    => $request->mentor_id,
             'mentee_id'    => $request->mentee_id,
             'prodi'        => $request->prodi,
             'tahun_ajaran' => '2026',
             'status'       => 'aktif',
         ]);
+
+        // Kirim notifikasi ke Mentor
+        $mentor = User::find($request->mentor_id);
+        $mentee = User::find($request->mentee_id);
+
+        Notifikasi::send(
+            $mentor->id,
+            'Mentee Baru Ditugaskan',
+            "Anda telah dipasangkan dengan mentee baru: {$mentee->name} ({$mentee->nim}).",
+            'sukses'
+        );
+
+        // Kirim notifikasi ke Mentee
+        Notifikasi::send(
+            $mentee->id,
+            'Mentor Telah Ditentukan',
+            "Anda telah dipasangkan dengan mentor: {$mentor->name} ({$mentor->prodi}).",
+            'sukses'
+        );
 
         return back()->with('success', 'Pasangan mentor-mentee berhasil ditambahkan.');
     }

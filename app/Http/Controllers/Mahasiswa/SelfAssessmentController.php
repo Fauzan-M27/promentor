@@ -53,7 +53,7 @@ class SelfAssessmentController extends Controller
             ]
         );
 
-        return redirect()->route('mahasiswa.beranda')
-            ->with('success', 'Self Assessment berhasil dikirim! Terima kasih atas kejujuran Anda.');
+        return redirect()->route('mahasiswa.seleksi')
+            ->with('success', 'Self Assessment berhasil dikirim! Silakan pantau status seleksi Anda di sini.');
     }
 }

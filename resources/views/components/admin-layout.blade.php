@@ -20,7 +20,8 @@
             --adm-accent-light: #dbeafe;
             --adm-text-muted: #94a3b8;
         }
-        body { margin: 0; display: flex; min-height: 100vh; background: #f1f5f9; }
+        body { margin: 0; display: flex; min-height: 100vh; background: #f1f5f9; overflow-x: hidden; width: 100%; position: relative; }
+        html { overflow-x: hidden; width: 100%; }
 
         /* SIDEBAR */
         .adm-sidebar {
@@ -30,8 +31,24 @@
             flex-direction: column;
             position: fixed;
             top: 0; left: 0; bottom: 0;
-            z-index: 50;
+            z-index: 100;
             overflow-y: auto;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .adm-sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 90;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .adm-sidebar-overlay.active {
+            display: block;
+            opacity: 1;
         }
         .adm-sidebar-logo {
             padding: 22px 20px 18px;
@@ -52,6 +69,39 @@
         .adm-nav-item.active { background: var(--adm-accent); color: #fff; }
         .adm-nav-item .icon { width: 20px; height: 20px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
         .adm-nav-item .icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+        /* SUB-NAV STYLES */
+        .adm-nav-group { position: relative; }
+        .adm-sub-nav { 
+            display: none; 
+            flex-direction: column; 
+            padding-left: 28px; 
+            margin-bottom: 8px;
+        }
+        .adm-nav-group.expanded .adm-sub-nav { display: flex; }
+        .adm-sub-nav-item {
+            padding: 6px 16px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all .15s;
+            border-radius: 6px;
+            margin: 1px 8px;
+            display: flex;
+            align-items: center;
+        }
+        .adm-sub-nav-item:hover { color: #fff; background: rgba(255,255,255,.05); }
+        .adm-sub-nav-item.active { color: #60a5fa; font-weight: 600; }
+        
+        .group-arrow { 
+            margin-left: auto; 
+            width: 14px !important; 
+            height: 14px !important; 
+            transition: transform .2s;
+            color: var(--adm-text-muted);
+        }
+        .adm-nav-group.expanded .group-arrow { transform: rotate(90deg); }
+
         .adm-stat-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
         .adm-stat-icon svg { width:18px; height:18px; stroke-width:2; fill:none; }
         .adm-sidebar-footer {
@@ -80,6 +130,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
         }
         .adm-topbar {
             background: #fff;
@@ -164,18 +217,60 @@
         .adm-alert-danger   { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
 
         @media(max-width:768px){
+            :root { --adm-sidebar-w: 0px; }
+            .adm-sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 20px 0 25px -5px rgba(0,0,0,0.1), 10px 0 10px -5px rgba(0,0,0,0.04);
+            }
+            .adm-sidebar.open { transform: translateX(0); }
+            .adm-main { margin-left: 0; }
             .adm-stat-grid { grid-template-columns:1fr 1fr; }
             .adm-form-grid-2 { grid-template-columns:1fr; }
+            .adm-content { padding: 80px 16px 16px; width: 100%; box-sizing: border-box; }
+            .mobile-only { display: flex !important; }
+            .adm-table-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table.adm-table { min-width: 700px; }
+            .adm-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 64px; }
+            .adm-stat-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+            .adm-stat-card { padding: 10px 4px !important; text-align: center; }
+            .adm-stat-icon { width: 28px !important; height: 28px !important; margin: 0 auto 6px !important; }
+            .adm-stat-icon svg { width: 14px !important; height: 14px !important; }
+            .adm-stat-val { font-size: 15px !important; letter-spacing: -0.5px; }
+            .adm-stat-lbl { font-size: 8px !important; text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+            
+            /* Responsive Utility Classes */
+            .adm-grid-resp { grid-template-columns: 1fr !important; gap: 16px !important; }
+            .adm-flex-resp { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+            .adm-hide-mobile { display: none !important; }
+            .adm-stack-mobile { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
         }
+        
+        .adm-grid-resp { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .adm-stat-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        @media(max-width:1024px){
+            .adm-stat-grid-4 { grid-template-columns: 1fr 1fr; }
+        }
+        @media(max-width:600px){
+            .adm-stat-grid-4 { grid-template-columns: 1fr 1fr; }
+        }
+        
+        .mobile-only { display: none; }
     </style>
 </head>
-<body>
+{{-- OVERLAY --}}
+<div class="adm-sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 {{-- SIDEBAR --}}
-<aside class="adm-sidebar">
-    <div class="adm-sidebar-logo">
-        <div class="brand">PRO<span>-MENTOR</span></div>
-        <div class="sub">Admin Panel</div>
+<aside class="adm-sidebar" id="sidebar">
+    <div class="adm-sidebar-logo" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div class="brand">PRO<span>-MENTOR</span></div>
+            <div class="sub">Admin Panel</div>
+        </div>
+        <button onclick="toggleSidebar()" style="background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; align-items:center; justify-content:center; cursor:pointer;" class="mobile-only">
+            <i data-lucide="x" style="width:18px; height:18px;"></i>
+        </button>
     </div>
 
     <div class="adm-nav-section">Menu</div>
@@ -189,9 +284,31 @@
     </a>
 
     <div class="adm-nav-section">Akses Cepat</div>
-    <a href="{{ route('dosen.beranda') }}" class="adm-nav-item" target="_blank">
-        <span class="icon"><i data-lucide="graduation-cap"></i></span> Sisi Dosen
-    </a>
+    
+    {{-- Sisi Dosen with Sub-menu --}}
+    @php
+        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*']);
+    @endphp
+    
+    <div class="adm-nav-group {{ $isDosenActive ? 'expanded' : '' }}">
+        <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('expanded')" class="adm-nav-item {{ $isDosenActive ? 'active' : '' }}">
+            <span class="icon"><i data-lucide="graduation-cap"></i></span> 
+            <span>Sisi Dosen</span>
+            <i data-lucide="chevron-right" class="group-arrow"></i>
+        </a>
+        <div class="adm-sub-nav">
+            <a href="{{ route('admin.pasangan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
+                Pasangan Mentor
+            </a>
+            <a href="{{ route('admin.feedback') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.feedback*') ? 'active' : '' }}">
+                Feedback Mentor
+            </a>
+            <a href="{{ route('admin.laporan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.laporan*') ? 'active' : '' }}">
+                Laporan & Analitik
+            </a>
+        </div>
+    </div>
+
     <a href="{{ route('mahasiswa.beranda') }}" class="adm-nav-item" target="_blank">
         <span class="icon"><i data-lucide="user"></i></span> Sisi Mahasiswa
     </a>
@@ -216,9 +333,14 @@
 {{-- MAIN --}}
 <div class="adm-main">
     <div class="adm-topbar">
-        <div class="adm-topbar-title">{{ $pageTitle }}</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button onclick="toggleSidebar()" style="background:var(--adm-accent-light); border:none; color:var(--adm-accent); width:40px; height:40px; border-radius:10px; align-items:center; justify-content:center; cursor:pointer; padding:0; transition: all 0.2s;" class="mobile-only" id="hamburger">
+                <i data-lucide="menu" style="width:24px; height:24px;"></i>
+            </button>
+            <div class="adm-topbar-title">{{ $pageTitle }}</div>
+        </div>
         <div class="adm-topbar-right">
-            <span style="font-size:12px; color:#64748b;">{{ now()->isoFormat('D MMMM YYYY') }}</span>
+            <span style="font-size:12px; color:#64748b; @media(max-width:480px){display:none;}">{{ now()->isoFormat('D MMMM YYYY') }}</span>
         </div>
     </div>
     <div class="adm-content">
@@ -226,6 +348,44 @@
     </div>
 </div>
 
-<script>lucide.createIcons();</script>
+<script>
+    lucide.createIcons();
+
+    function toggleSidebar() {
+        if (window.innerWidth > 768) return;
+        
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const isOpen = sidebar.classList.toggle('open');
+        
+        if (isOpen) {
+            overlay.style.display = 'block';
+            setTimeout(() => overlay.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        } else {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                if (!sidebar.classList.contains('open')) {
+                    overlay.style.display = 'none';
+                }
+            }, 400);
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Close sidebar on click outside on mobile
+    document.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.getElementById('hamburger');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (window.innerWidth <= 768 && 
+            sidebar.classList.contains('open') && 
+            !sidebar.contains(event.target) && 
+            !hamburger.contains(event.target)) {
+            toggleSidebar();
+        }
+    });
+</script>
 </body>
 </html>

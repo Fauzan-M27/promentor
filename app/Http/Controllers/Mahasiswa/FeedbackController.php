@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Mahasiswa;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use App\Models\Pasangan;
+use App\Models\Notifikasi;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -61,6 +63,26 @@ class FeedbackController extends Controller
             'pasangan_id'  => $pasangan->id,
             'tahun_ajaran' => '2026',
         ]));
+
+        // Kirim notifikasi ke Mentor
+        $mentor = User::find($pasangan->mentor_id);
+        Notifikasi::send(
+            $mentor->id,
+            'Feedback Baru Diterima',
+            "Anda baru saja menerima feedback baru dari mentee {$user->name}. Cek detailnya di halaman feedback.",
+            'info'
+        );
+
+        // Kirim notifikasi ke semua admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            Notifikasi::send(
+                $admin->id,
+                'Feedback Mentor Terkirim',
+                "Mentee {$user->name} baru saja memberi feedback ke mentor {$mentor->name}.",
+                'info'
+            );
+        }
 
         return back()->with('success', 'Feedback berhasil dikirim! Terima kasih atas penilaian Anda.');
     }

@@ -1,26 +1,39 @@
 {{-- ===== NAVBAR ===== --}}
 <nav class="pm-nav">
-    <div class="pm-nav-logo"><span>PRO</span>-MENTOR <span style="font-size:11px;font-weight:400;color:#888;margin-left:6px;">JTIK UNM</span></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-        <div class="pm-av pm-av-blue" style="width:30px;height:30px;font-size:10px;">
-            {{ strtoupper(substr(auth()->user()->name, 0, 3)) }}
+    <div class="pm-container" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding-top:0;padding-bottom:0;">
+        <div class="pm-nav-logo"><span>PRO-</span><br>MENTOR</div>
+        
+        <div class="pm-nav-actions">
+            <div class="pm-nav-info" style="text-align:right;">
+                <span class="pm-nav-name">{{ auth()->user()->name }}</span>
+                <div class="pm-nav-badges">
+                    <span class="badge badge-review">Dosen</span>
+                </div>
+            </div>
+            <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                @csrf
+                <button type="submit" class="pm-btn">Keluar</button>
+            </form>
         </div>
-        <span style="font-size:13px;font-weight:600;color:#1a1a2e;">{{ auth()->user()->name }}</span>
-        <span class="badge badge-review" style="font-size:11px;">Dosen</span>
-        <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-            @csrf
-            <button type="submit" class="pm-btn" style="font-size:12px;padding:5px 12px;">Keluar</button>
-        </form>
     </div>
 </nav>
 
 {{-- ===== TAB BAR ===== --}}
 <div class="pm-tab-bar">
-    <a href="{{ route('dosen.beranda') }}"   class="pm-tab {{ request()->routeIs('dosen.beranda')        ? 'active' : '' }}">Beranda</a>
-    <a href="{{ route('dosen.pendaftar') }}" class="pm-tab {{ request()->routeIs(['dosen.pendaftar', 'dosen.seleksi.*']) ? 'active' : '' }}">Seleksi Mentor</a>
-    <a href="{{ route('dosen.pasangan') }}"  class="pm-tab {{ request()->routeIs('dosen.pasangan*')       ? 'active' : '' }}">Pasangan Mentor</a>
-    <a href="{{ route('dosen.feedback') }}"  class="pm-tab {{ request()->routeIs('dosen.feedback')        ? 'active' : '' }}">Rekap Feedback</a>
-    <a href="{{ route('dosen.laporan') }}"   class="pm-tab {{ request()->routeIs('dosen.laporan*')        ? 'active' : '' }}">Laporan</a>
+    <div class="pm-container" style="display:flex;gap:2px;padding-top:0;padding-bottom:0;width:100%;">
+        <a href="{{ route('dosen.beranda') }}"   class="pm-tab {{ request()->routeIs('dosen.beranda')        ? 'active' : '' }}">Beranda</a>
+        <a href="{{ route('dosen.pendaftar') }}" class="pm-tab {{ request()->routeIs(['dosen.pendaftar', 'dosen.seleksi.*']) ? 'active' : '' }}">Seleksi</a>
+        <a href="{{ route('dosen.notifikasi') }}" class="pm-tab {{ request()->routeIs('dosen.notifikasi') ? 'active' : '' }}">
+            <span>Notifikasi</span>
+            @php $jumlahNotifikasiUnread = auth()->user()->notifikasi()->where('dibaca', false)->count(); @endphp
+            @if($jumlahNotifikasiUnread > 0)
+                <span style="background:#185FA5;color:white;font-size:10px;padding:2px 8px;border-radius:12px;margin-left:6px;font-weight:700;">
+                    {{ $jumlahNotifikasiUnread }}
+                </span>
+            @endif
+        </a>
+
+    </div>
 </div>
 
 {{-- FLASH MESSAGES --}}

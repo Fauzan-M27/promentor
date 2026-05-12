@@ -25,7 +25,7 @@
     <div style="font-size:15px;font-weight:600;margin-bottom:16px;">Formulir Pendaftaran Mentor PRO-MENTOR 2026</div>
 
     <div class="pm-card">
-        <form method="POST" action="{{ route('mahasiswa.daftar.store') }}">
+        <form method="POST" action="{{ route('mahasiswa.daftar.store') }}" enctype="multipart/form-data">
             @csrf
 
             {{-- BARIS 1: Nama + NIM --}}
@@ -52,7 +52,6 @@
                         <option value="">Pilih Prodi</option>
                         <option value="PTIK"            {{ old('prodi',$user->prodi)==='PTIK'            ?'selected':'' }}>PTIK</option>
                         <option value="Teknik Komputer" {{ old('prodi',$user->prodi)==='Teknik Komputer' ?'selected':'' }}>Teknik Komputer</option>
-                        <option value="Sistem Informasi"{{ old('prodi',$user->prodi)==='Sistem Informasi'?'selected':'' }}>Sistem Informasi</option>
                     </select>
                     @error('prodi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
                 </div>
@@ -101,27 +100,41 @@
                 @error('pengalaman_organisasi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
             </div>
 
-            {{-- Motivasi --}}
-            <div style="margin-bottom:12px;">
-                <label class="pm-label">Motivasi Menjadi Mentor PRO-MENTOR</label>
-                <textarea name="motivasi" class="pm-input" rows="4"
-                    placeholder="Mengapa Anda ingin menjadi mentor bagi mahasiswa baru?"
-                    {{ $sudahDaftar ? 'disabled' : '' }}>{{ old('motivasi') }}</textarea>
-                @error('motivasi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
-            </div>
-
             {{-- Ketersediaan Waktu --}}
-            <div style="margin-bottom:20px;">
+            <div style="margin-bottom:12px;">
                 <label class="pm-label">Ketersediaan Waktu (jam per minggu)</label>
                 <select name="ketersediaan_waktu" class="pm-input" {{ $sudahDaftar ? 'disabled' : '' }}>
                     <option value="">Pilih</option>
-                    <option value="2"  {{ old('ketersediaan_waktu')==='2'  ?'selected':'' }}>2 jam per minggu</option>
-                    <option value="4"  {{ old('ketersediaan_waktu')==='4'  ?'selected':'' }}>4 jam per minggu</option>
-                    <option value="6"  {{ old('ketersediaan_waktu')==='6'  ?'selected':'' }}>6 jam per minggu</option>
-                    <option value="8"  {{ old('ketersediaan_waktu')==='8'  ?'selected':'' }}>8 jam per minggu</option>
-                    <option value="10" {{ old('ketersediaan_waktu')==='10' ?'selected':'' }}>10+ jam per minggu</option>
+                    <option value="1"  {{ old('ketersediaan_waktu')==='1-2'  ?'selected':'' }}>1-2 jam per minggu</option>
+                    <option value="2"  {{ old('ketersediaan_waktu')==='2-3'  ?'selected':'' }}>2-3 jam per minggu</option>
+                    <option value="3"  {{ old('ketersediaan_waktu')==='3-4'  ?'selected':'' }}>3-4 jam per minggu</option>
+                    <option value="4"  {{ old('ketersediaan_waktu')==='4+'  ?'selected':'' }}>4+ jam per minggu</option>
                 </select>
                 @error('ketersediaan_waktu')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+            </div>
+
+            {{-- Motivation Letter --}}
+            <div style="margin-bottom:12px;">
+                <label class="pm-label">Motivation Letter (PDF) <span style="color:#991b1b;">*</span></label>
+                <div style="font-size:11px;color:#888;margin-bottom:4px;">Unggah motivation letter untuk menjadi pro-mentor.</div>
+                <input type="file" name="motivation_letter" class="pm-input" accept="application/pdf" {{ $sudahDaftar ? 'disabled' : '' }}>
+                @error('motivation_letter')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+            </div>
+
+            {{-- KHS Terbaru --}}
+            <div style="margin-bottom:12px;">
+                <label class="pm-label">KHS Terbaru (PDF) <span style="color:#991b1b;">*</span></label>
+                <div style="font-size:11px;color:#888;margin-bottom:4px;">Unggah Kartu Hasil Studi (KHS) semester terakhir.</div>
+                <input type="file" name="khs" class="pm-input" accept="application/pdf" {{ $sudahDaftar ? 'disabled' : '' }}>
+                @error('khs')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+            </div>
+
+            {{-- Sertifikat Organisasi --}}
+            <div style="margin-bottom:20px;">
+                <label class="pm-label">Sertifikat Organisasi (PDF, Opsional)</label>
+                <div style="font-size:11px;color:#888;margin-bottom:4px;">Unggah Sertifikat Organisasi (Jika ada)</div>
+                <input type="file" name="sertifikat_organisasi" class="pm-input" accept="application/pdf" {{ $sudahDaftar ? 'disabled' : '' }}>
+                @error('sertifikat_organisasi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
             </div>
 
             {{-- SUBMIT --}}
