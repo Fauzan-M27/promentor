@@ -1,8 +1,76 @@
 {{-- ===== NAVBAR ===== --}}
+<style>
+    .pm-mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 998;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .pm-mobile-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+    .pm-mobile-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100%;
+        background: #fff;
+        z-index: 999;
+        transition: right 0.3s;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+    }
+    .pm-mobile-menu.active {
+        right: 0;
+    }
+    .pm-hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        padding: 8px;
+    }
+    .pm-hamburger span {
+        width: 24px;
+        height: 3px;
+        background: #185FA5;
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    @media(max-width:768px) {
+        .pm-nav-actions {
+            display: none !important;
+        }
+        .pm-hamburger {
+            display: flex !important;
+        }
+        .pm-mobile-menu {
+            display: block;
+        }
+        .pm-tab-bar {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .pm-tab-bar::-webkit-scrollbar {
+            display: none;
+        }
+    }
+</style>
+
 <nav class="pm-nav">
     <div class="pm-container" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding-top:0;padding-bottom:0;">
         <div class="pm-nav-logo"><span>PRO-</span><br>MENTOR</div>
         
+        {{-- Desktop Menu --}}
         <div class="pm-nav-actions">
             <div class="pm-nav-info" style="text-align:right;">
                 <span class="pm-nav-name">{{ auth()->user()->name }}</span>
@@ -20,8 +88,58 @@
                 <button type="submit" class="pm-btn">Keluar</button>
             </form>
         </div>
+
+        {{-- Mobile Hamburger --}}
+        <div class="pm-hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
 </nav>
+
+{{-- Mobile Menu --}}
+<div class="pm-mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+<div class="pm-mobile-menu" id="mobileMenu">
+    <div style="padding:20px;border-bottom:1px solid #e2e8f0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-size:18px;font-weight:700;color:#185FA5;">PRO-MENTOR</div>
+            <button onclick="toggleMobileMenu()" style="background:none;border:none;cursor:pointer;padding:8px;">
+                <i data-lucide="x" style="width:24px;height:24px;color:#64748b;"></i>
+            </button>
+        </div>
+        <div style="font-weight:600;color:#0f172a;margin-bottom:4px;">{{ auth()->user()->name }}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-success">Mahasiswa</span>
+            @if(auth()->user()->pendaftaran && auth()->user()->pendaftaran->status === 'diterima')
+                <span class="badge badge-info" style="background:#e0f2fe;color:#0369a1;">Mentor</span>
+            @endif
+        </div>
+    </div>
+    <div style="padding:12px;">
+        <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;gap:12px;padding:12px;text-decoration:none;color:#0f172a;border-radius:8px;transition:background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+            <i data-lucide="user" style="width:20px;height:20px;color:#185FA5;"></i>
+            <span style="font-weight:500;">Profil Saya</span>
+        </a>
+        <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+            @csrf
+            <button type="submit" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px;text-decoration:none;color:#991b1b;border-radius:8px;transition:background 0.2s;background:none;border:none;cursor:pointer;text-align:left;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background=''">
+                <i data-lucide="log-out" style="width:20px;height:20px;"></i>
+                <span style="font-weight:500;">Keluar</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+</script>
 
 {{-- ===== TAB BAR ===== --}}
 @php

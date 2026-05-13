@@ -6,6 +6,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        @media(max-width:768px) {
+            body {
+                padding-bottom: 20px;
+            }
+            .pm-card {
+                padding: 16px !important;
+            }
+            /* Form grid responsive */
+            div[style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            /* Alert responsive */
+            div[style*="display:flex;gap:10px"] {
+                flex-direction: column;
+                gap: 8px !important;
+            }
+            /* Submit button area */
+            div[style*="display:flex;justify-content:space-between"] {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch !important;
+            }
+            .pm-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 @include('mahasiswa.partials.nav')

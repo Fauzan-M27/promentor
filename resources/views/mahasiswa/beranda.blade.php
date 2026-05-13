@@ -16,7 +16,7 @@
     <div class="pm-stat-grid" style="margin-bottom:16px;">
         @if($pendaftaran && $pendaftaran->status === 'diterima')
             {{-- MENTEE CARD (Untuk user yang sudah LOLOS jadi mentor) --}}
-            <div class="pm-info-card pm-info-card-mentee">
+            <div class="pm-info-card pm-info-card-mentee pm-mentee-card-responsive">
                 @if($mentees->count() > 0)
                     <div class="pm-info-card-content">
                         <span class="pm-info-card-label" style="color: var(--pm-success);">Mentee Saya</span>
@@ -251,6 +251,97 @@
 </div>
 
 <div style="text-align:center;padding:16px;font-size:11px;color:#aaa;border-top:1px solid #e8eaed;margin-top:20px;">PRO-MENTOR v1.0 · JTIK UNM · 2026</div>
+
+<style>
+    /* Mobile responsive styles for Mentee Card */
+    @media (max-width: 768px) {
+        /* Make mentee card full width on mobile */
+        .pm-mentee-card-responsive {
+            grid-column: 1 / -1 !important;
+            padding: 16px !important;
+        }
+        
+        /* Enable horizontal scroll for mentee list on mobile */
+        .pm-mentee-list {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.2) transparent;
+            padding-bottom: 12px;
+        }
+        
+        /* Webkit scrollbar styling for mentee list */
+        .pm-mentee-list::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .pm-mentee-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 2px;
+        }
+        
+        .pm-mentee-list::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 2px;
+        }
+        
+        /* Ensure mentee items don't shrink too much */
+        .pm-mentee-item {
+            min-width: 140px !important;
+            padding-right: 16px;
+        }
+        
+        /* Adjust font sizes for mobile */
+        .pm-mentee-item > div:first-child {
+            font-size: 12px !important;
+        }
+        
+        .pm-mentee-item > div:last-child {
+            font-size: 10px !important;
+        }
+        
+        /* Adjust label size on mobile */
+        .pm-info-card-label {
+            font-size: 10px !important;
+        }
+        
+        /* Make mentor card responsive too */
+        .pm-stat-grid > div[style*="grid-column: span 3"] {
+            grid-column: 1 / -1 !important;
+        }
+        
+        /* Adjust mentor card padding and layout on mobile */
+        .pm-stat-grid > div[style*="linear-gradient"] > div[style*="padding"] {
+            padding: 16px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 12px !important;
+        }
+        
+        /* Make mentor info wrap better on mobile */
+        .pm-stat-grid > div[style*="linear-gradient"] > div > div[style*="flex:1"] {
+            width: 100%;
+        }
+        
+        /* Stack mentor meta info vertically on very small screens */
+        @media (max-width: 480px) {
+            .pm-stat-grid > div[style*="linear-gradient"] > div > div[style*="flex:1"] > div[style*="display:flex"] {
+                flex-direction: column !important;
+                gap: 6px !important;
+                align-items: flex-start !important;
+            }
+        }
+        
+        /* Adjust feedback card on mobile */
+        .pm-stat-grid > div[style*="position:relative"][style*="border-radius:14px"] {
+            padding: 14px 16px !important;
+        }
+        
+        .pm-stat-grid > div[style*="position:relative"][style*="border-radius:14px"] .pm-stat-value {
+            font-size: 28px !important;
+        }
+    }
+</style>
 
 <script>
     lucide.createIcons();

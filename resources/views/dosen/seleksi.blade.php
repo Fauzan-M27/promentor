@@ -21,6 +21,50 @@
             padding: 14px 20px; border-bottom: 1px solid #e2e8f0; display: flex;
             justify-content: space-between; align-items: center; background: #f8fafc;
         }
+        
+        /* Mobile Responsive */
+        @media(max-width:768px) {
+            .pm-card {
+                padding: 14px !important;
+            }
+            /* Slider grid to single column */
+            div[style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            /* Info grid responsive */
+            div[style*="display:grid;grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            /* Button groups */
+            div[style*="display:flex;gap:10px"] {
+                flex-wrap: wrap;
+            }
+            div[style*="display:flex;gap:8px"] {
+                flex-wrap: wrap;
+            }
+            .pm-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+            /* Modal full screen on mobile */
+            .pm-modal-content {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+            /* Keputusan buttons */
+            div[style*="display:flex;justify-content:flex-end"] {
+                flex-direction: column;
+                gap: 8px !important;
+            }
+            div[style*="display:flex;justify-content:flex-end"] form {
+                width: 100%;
+            }
+            div[style*="display:flex;justify-content:flex-end"] .pm-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>

@@ -50,6 +50,14 @@
             background: #fee2e2;
             color: #dc2626;
         }
+        .file-name {
+            font-size: 11px;
+            color: #64748b;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 300px;
+        }
         .section-card {
             background: #fff;
             border: 1px solid #e2e8f0;
@@ -101,6 +109,50 @@
             justify-content: space-between;
             align-items: center;
             background: #f8fafc;
+        }
+        
+        /* Mobile Responsive */
+        @media(max-width:768px) {
+            .section-card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            .info-row {
+                flex-direction: column;
+                padding: 10px 0;
+                gap: 4px;
+            }
+            .info-label {
+                width: 100%;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .info-value {
+                font-size: 14px;
+            }
+            .file-card {
+                flex-wrap: wrap;
+                padding: 12px;
+                gap: 10px;
+            }
+            .file-icon {
+                width: 40px;
+                height: 40px;
+            }
+            .file-card > div:nth-child(2) {
+                flex: 1;
+                min-width: 150px;
+            }
+            .file-card .adm-btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .pm-modal-content {
+                width: 95%;
+                height: 90%;
+                margin: 5% auto;
+            }
         }
     </style>
 
@@ -210,7 +262,7 @@
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:600;color:#0f172a;font-size:13px;">Motivation Letter</div>
-                        <div style="font-size:11px;color:#64748b;">{{ basename($pendaftaran->motivation_letter) }}</div>
+                        <div class="file-name" title="{{ basename($pendaftaran->motivation_letter) }}">{{ basename($pendaftaran->motivation_letter) }}</div>
                     </div>
                     <button type="button" onclick="openPdf('{{ route('admin.pendaftar.preview', ['pendaftaran' => $pendaftaran, 'fileType' => 'motivation_letter']) }}', 'Motivation Letter - {{ $mhs->name }}')" class="adm-btn adm-btn-primary adm-btn-sm" style="gap:5px;">
                         <i data-lucide="eye" style="width:12px;height:12px;"></i> Lihat
@@ -239,7 +291,7 @@
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:600;color:#0f172a;font-size:13px;">Kartu Hasil Studi (KHS)</div>
-                        <div style="font-size:11px;color:#64748b;">{{ basename($pendaftaran->khs) }}</div>
+                        <div class="file-name" title="{{ basename($pendaftaran->khs) }}">{{ basename($pendaftaran->khs) }}</div>
                     </div>
                     <button type="button" onclick="openPdf('{{ route('admin.pendaftar.preview', ['pendaftaran' => $pendaftaran, 'fileType' => 'khs']) }}', 'KHS Terbaru - {{ $mhs->name }}')" class="adm-btn adm-btn-primary adm-btn-sm" style="gap:5px;">
                         <i data-lucide="eye" style="width:12px;height:12px;"></i> Lihat
@@ -268,7 +320,7 @@
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:600;color:#0f172a;font-size:13px;">Sertifikat Organisasi</div>
-                        <div style="font-size:11px;color:#64748b;">{{ basename($pendaftaran->sertifikat_organisasi) }}</div>
+                        <div class="file-name" title="{{ basename($pendaftaran->sertifikat_organisasi) }}">{{ basename($pendaftaran->sertifikat_organisasi) }}</div>
                     </div>
                     <button type="button" onclick="openPdf('{{ route('admin.pendaftar.preview', ['pendaftaran' => $pendaftaran, 'fileType' => 'sertifikat_organisasi']) }}', 'Sertifikat Organisasi - {{ $mhs->name }}')" class="adm-btn adm-btn-primary adm-btn-sm" style="gap:5px;">
                         <i data-lucide="eye" style="width:12px;height:12px;"></i> Lihat
@@ -297,7 +349,7 @@
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:600;color:#0f172a;font-size:13px;">Sertifikat Mentoring</div>
-                        <div style="font-size:11px;color:#64748b;">{{ basename($pendaftaran->sertifikat_mentoring) }}</div>
+                        <div class="file-name" title="{{ basename($pendaftaran->sertifikat_mentoring) }}">{{ basename($pendaftaran->sertifikat_mentoring) }}</div>
                     </div>
                     <button type="button" onclick="openPdf('{{ route('admin.pendaftar.preview', ['pendaftaran' => $pendaftaran, 'fileType' => 'sertifikat_mentoring']) }}', 'Sertifikat Mentoring - {{ $mhs->name }}')" class="adm-btn adm-btn-primary adm-btn-sm" style="gap:5px;">
                         <i data-lucide="eye" style="width:12px;height:12px;"></i> Lihat

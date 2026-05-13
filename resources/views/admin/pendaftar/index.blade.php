@@ -40,6 +40,18 @@
         </div>
     </div>
 
+    <style>
+        @media(max-width:768px) {
+            .adm-stat-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+            .adm-stat-card:last-child {
+                grid-column: span 2;
+            }
+        }
+    </style>
+
     {{-- FILTER --}}
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
         <form method="GET" action="{{ route('admin.pendaftar.index') }}" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
