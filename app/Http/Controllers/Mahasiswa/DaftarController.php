@@ -37,7 +37,11 @@ class DaftarController extends Controller
             'no_wa'                 => ['required', 'string', 'max:20'],
             'email'                 => ['required', 'email'],
             'pengalaman_organisasi' => ['nullable', 'string', 'max:1000'],
-            'ketersediaan_waktu'    => ['required', 'in:2,4,6,8,10'],
+            'ketersediaan_waktu'    => ['required', function ($attribute, $value, $fail) {
+                if (!in_array($value, ['1-2', '2-3', '3-4', '4+'])) {
+                    $fail('Pilihan ketersediaan waktu tidak valid.');
+                }
+            }],
             'motivation_letter'     => ['required', 'file', 'mimes:pdf', 'max:2048'],
             'khs'                   => ['required', 'file', 'mimes:pdf', 'max:2048'],
             'sertifikat_organisasi' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],

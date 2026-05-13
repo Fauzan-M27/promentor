@@ -118,6 +118,16 @@ Route::middleware(['auth', 'role:admin'])
             ->name('laporan');
         Route::get('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])
             ->name('laporan.export');
+
+        // Data Pendaftar Mentor
+        Route::get('/pendaftar', [\App\Http\Controllers\Admin\PendaftarController::class, 'index'])
+            ->name('pendaftar.index');
+        Route::get('/pendaftar/{pendaftaran}', [\App\Http\Controllers\Admin\PendaftarController::class, 'show'])
+            ->name('pendaftar.show');
+        Route::get('/pendaftar/{pendaftaran}/download/{fileType}', [\App\Http\Controllers\Admin\PendaftarController::class, 'downloadFile'])
+            ->name('pendaftar.download');
+        Route::get('/pendaftar/{pendaftaran}/preview/{fileType}', [\App\Http\Controllers\Admin\PendaftarController::class, 'previewFile'])
+            ->name('pendaftar.preview');
     });
 
 // ============================================================

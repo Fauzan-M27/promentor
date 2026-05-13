@@ -105,10 +105,10 @@
                 <label class="pm-label">Ketersediaan Waktu (jam per minggu)</label>
                 <select name="ketersediaan_waktu" class="pm-input" {{ $sudahDaftar ? 'disabled' : '' }}>
                     <option value="">Pilih</option>
-                    <option value="1"  {{ old('ketersediaan_waktu')==='1-2'  ?'selected':'' }}>1-2 jam per minggu</option>
-                    <option value="2"  {{ old('ketersediaan_waktu')==='2-3'  ?'selected':'' }}>2-3 jam per minggu</option>
-                    <option value="3"  {{ old('ketersediaan_waktu')==='3-4'  ?'selected':'' }}>3-4 jam per minggu</option>
-                    <option value="4"  {{ old('ketersediaan_waktu')==='4+'  ?'selected':'' }}>4+ jam per minggu</option>
+                    <option value="1-2" {{ old('ketersediaan_waktu')==='1-2' ?'selected':'' }}>1-2 jam per minggu</option>
+                    <option value="2-3" {{ old('ketersediaan_waktu')==='2-3' ?'selected':'' }}>2-3 jam per minggu</option>
+                    <option value="3-4" {{ old('ketersediaan_waktu')==='3-4' ?'selected':'' }}>3-4 jam per minggu</option>
+                    <option value="4+"  {{ old('ketersediaan_waktu')==='4+'  ?'selected':'' }}>4+ jam per minggu</option>
                 </select>
                 @error('ketersediaan_waktu')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
             </div>

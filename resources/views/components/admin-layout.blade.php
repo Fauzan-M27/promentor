@@ -283,6 +283,11 @@
         <span class="icon"><i data-lucide="users"></i></span> Kelola User
     </a>
 
+    <a href="{{ route('admin.pendaftar.index') }}"
+       class="adm-nav-item {{ request()->routeIs('admin.pendaftar.*') ? 'active' : '' }}">
+        <span class="icon"><i data-lucide="clipboard-list"></i></span> Data Pendaftar
+    </a>
+
     <div class="adm-nav-section">Akses Cepat</div>
     
     {{-- Sisi Dosen with Sub-menu --}}
