@@ -254,12 +254,33 @@
         </div>
     </div>
 
-    {{-- 5. SELF ASSESSMENT KANDIDAT --}}
+    {{-- 5. SERTIFIKAT MENTORING --}}
+    <div class="pm-card" style="margin-top:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:14px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="graduation-cap" style="width:18px;height:18px;color:#185FA5;"></i> 5. Sertifikat Mentoring / Pelatihan
+            </div>
+            @if($pendaftaran->sertifikat_mentoring)
+            <div style="display:flex;gap:8px;">
+                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}', 'Sertifikat Mentoring - {{ $pendaftaran->mahasiswa->name }}')" class="pm-btn" style="padding:6px 12px;font-size:11px;background:#eff6ff;color:#185FA5;border-color:#bfdbfe;">
+                    <i data-lucide="eye" style="width:13px;height:13px;margin-right:4px;"></i> Preview
+                </button>
+                <a href="{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}" download class="pm-btn" style="padding:6px 12px;font-size:11px;">
+                    <i data-lucide="download" style="width:13px;height:13px;margin-right:4px;"></i> Download
+                </a>
+            </div>
+            @else
+            <div style="font-size:12px;color:#888;">Tidak melampirkan sertifikat mentoring.</div>
+            @endif
+        </div>
+    </div>
+
+    {{-- 6. SELF ASSESSMENT KANDIDAT --}}
     @php $sa = $pendaftaran->selfAssessment; @endphp
     @if($sa)
     <div class="pm-card" style="margin-top:14px;">
         <div style="font-size:14px;font-weight:700;margin-bottom:14px;color:#0f172a;display:flex;align-items:center;gap:8px;">
-            <i data-lucide="user-check" style="width:18px;height:18px;color:#185FA5;"></i> 5. Hasil Self Assessment Kandidat
+            <i data-lucide="user-check" style="width:18px;height:18px;color:#185FA5;"></i> 6. Hasil Self Assessment Kandidat
         </div>
         
         @php

@@ -98,6 +98,7 @@
                         $mhs = $p->mahasiswa;
                         $inits = strtoupper(substr($mhs->name ?? 'NA', 0, 2));
                         $fileCount = 0;
+                        if($p->motivation_letter) $fileCount++;
                         if($p->khs) $fileCount++;
                         if($p->sertifikat_organisasi) $fileCount++;
                         if($p->sertifikat_mentoring) $fileCount++;
