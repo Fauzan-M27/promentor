@@ -6,10 +6,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Responsive styles for mobile */
+        @media (max-width: 768px) {
+            /* Stats grid: 3 columns → 1 column on mobile */
+            .stats-grid-responsive {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Filter form: stack vertically on mobile */
+            .filter-form-responsive {
+                flex-direction: column !important;
+            }
+            
+            .filter-form-responsive select,
+            .filter-form-responsive input,
+            .filter-form-responsive button,
+            .filter-form-responsive a {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+            
+            /* Table wrapper: enable horizontal scroll */
+            .table-wrapper-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .table-wrapper-responsive table {
+                min-width: 800px; /* Ensure table doesn't shrink too much */
+            }
+            
+            /* Adjust padding for mobile */
+            .mobile-padding {
+                padding: 16px !important;
+            }
+            
+            /* Stats card: adjust layout for mobile */
+            .stat-card-mobile {
+                padding: 12px !important;
+            }
+            
+            .stat-card-mobile > div:first-child {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .stat-card-mobile > div:first-child i {
+                width: 20px !important;
+                height: 20px !important;
+            }
+        }
+    </style>
 </head>
 <body>
 @include('dosen.partials.nav')
-<div style="padding:20px 24px;max-width:960px;margin:0 auto;">
+<div class="mobile-padding" style="padding:20px 24px;max-width:960px;margin:0 auto;">
 
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
         <i data-lucide="clipboard-check" style="width:24px;height:24px;color:#185FA5;"></i>
@@ -17,8 +69,8 @@
     </div>
 
     {{-- STATS GRID --}}
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
-        <div class="pm-card" style="padding:16px;display:flex;align-items:center;gap:16px;">
+    <div class="stats-grid-responsive" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+        <div class="pm-card stat-card-mobile" style="padding:16px;display:flex;align-items:center;gap:16px;">
             <div style="width:48px;height:48px;border-radius:12px;background:#fefce8;color:#ca8a04;display:flex;align-items:center;justify-content:center;">
                 <i data-lucide="clock" style="width:24px;height:24px;"></i>
             </div>
@@ -27,7 +79,7 @@
                 <div style="font-size:12px;color:#64748b;font-weight:500;">Perlu Dinilai</div>
             </div>
         </div>
-        <div class="pm-card" style="padding:16px;display:flex;align-items:center;gap:16px;">
+        <div class="pm-card stat-card-mobile" style="padding:16px;display:flex;align-items:center;gap:16px;">
             <div style="width:48px;height:48px;border-radius:12px;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;">
                 <i data-lucide="check-circle" style="width:24px;height:24px;"></i>
             </div>
@@ -36,7 +88,7 @@
                 <div style="font-size:12px;color:#64748b;font-weight:500;">Diterima</div>
             </div>
         </div>
-        <div class="pm-card" style="padding:16px;display:flex;align-items:center;gap:16px;">
+        <div class="pm-card stat-card-mobile" style="padding:16px;display:flex;align-items:center;gap:16px;">
             <div style="width:48px;height:48px;border-radius:12px;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center;">
                 <i data-lucide="users" style="width:24px;height:24px;"></i>
             </div>
@@ -48,7 +100,7 @@
     </div>
 
     {{-- FILTER --}}
-    <form method="GET" action="{{ route('dosen.pendaftar') }}" style="display:flex;gap:10px;margin-bottom:16px;">
+    <form method="GET" action="{{ route('dosen.pendaftar') }}" class="filter-form-responsive" style="display:flex;gap:10px;margin-bottom:16px;">
         <select name="status" class="pm-input" style="width:auto;min-width:150px;" onchange="this.form.submit()">
             <option value="">Semua Status</option>
             <option value="pending"  {{ request('status')==='pending'  ?'selected':'' }}>Pending</option>
@@ -77,7 +129,8 @@
 
     {{-- TABEL --}}
     <div class="pm-card" style="padding:0;overflow:hidden;">
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <div class="table-wrapper-responsive">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
             <thead>
                 <tr style="background:#f9fafb;border-bottom:1px solid #e8eaed;">
                     <th style="padding:11px 16px;text-align:left;font-size:12px;color:#555;font-weight:600;">Pendaftar</th>
@@ -129,6 +182,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
         @if($pendaftar->hasPages())
             <div style="padding:12px 16px;border-top:1px solid #e8eaed;font-size:12px;color:#888;">
                 {{ $pendaftar->appends(request()->query())->links() }}

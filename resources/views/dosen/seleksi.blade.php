@@ -22,6 +22,71 @@
             justify-content: space-between; align-items: center; background: #f8fafc;
         }
         
+        /* File Action Buttons */
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-preview {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid #3b82f6;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-preview:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-preview:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-download:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #1e293b;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .btn-download:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
         /* Mobile Responsive */
         @media(max-width:768px) {
             .pm-card {
@@ -63,6 +128,18 @@
             }
             div[style*="display:flex;justify-content:flex-end"] .pm-btn {
                 width: 100%;
+            }
+            
+            /* File action buttons responsive */
+            .file-actions {
+                width: 100%;
+            }
+            
+            .btn-preview,
+            .btn-download {
+                flex: 1;
+                justify-content: center;
+                min-width: 0;
             }
         }
     </style>
@@ -245,16 +322,16 @@
 
     {{-- 2. KHS TERBARU --}}
     <div class="pm-card" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div style="font-size:14px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px;">
                 <i data-lucide="file-badge" style="width:18px;height:18px;color:#185FA5;"></i> 2. KHS Terbaru
             </div>
-            <div style="display:flex;gap:8px;">
-                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->khs) }}', 'KHS Terbaru - {{ $pendaftaran->mahasiswa->name }}')" class="pm-btn" style="padding:6px 12px;font-size:11px;background:#eff6ff;color:#185FA5;border-color:#bfdbfe;">
-                    <i data-lucide="eye" style="width:13px;height:13px;margin-right:4px;"></i> Preview
+            <div class="file-actions">
+                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->khs) }}', 'KHS Terbaru - {{ $pendaftaran->mahasiswa->name }}')" class="btn-preview">
+                    <i data-lucide="eye" style="width:14px;height:14px;"></i> Preview
                 </button>
-                <a href="{{ asset('storage/'.$pendaftaran->khs) }}" download class="pm-btn" style="padding:6px 12px;font-size:11px;">
-                    <i data-lucide="download" style="width:13px;height:13px;margin-right:4px;"></i> Download
+                <a href="{{ asset('storage/'.$pendaftaran->khs) }}" download class="btn-download">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i> Download
                 </a>
             </div>
         </div>
@@ -262,16 +339,16 @@
 
     {{-- 3. ESSAY MOTIVASI --}}
     <div class="pm-card" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div style="font-size:14px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px;">
                 <i data-lucide="pen-tool" style="width:18px;height:18px;color:#185FA5;"></i> 3. Essay Motivasi (Motivation Letter)
             </div>
-            <div style="display:flex;gap:8px;">
-                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->motivation_letter) }}', 'Motivation Letter - {{ $pendaftaran->mahasiswa->name }}')" class="pm-btn" style="padding:6px 12px;font-size:11px;background:#eff6ff;color:#185FA5;border-color:#bfdbfe;">
-                    <i data-lucide="eye" style="width:13px;height:13px;margin-right:4px;"></i> Preview
+            <div class="file-actions">
+                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->motivation_letter) }}', 'Motivation Letter - {{ $pendaftaran->mahasiswa->name }}')" class="btn-preview">
+                    <i data-lucide="eye" style="width:14px;height:14px;"></i> Preview
                 </button>
-                <a href="{{ asset('storage/'.$pendaftaran->motivation_letter) }}" download class="pm-btn" style="padding:6px 12px;font-size:11px;">
-                    <i data-lucide="download" style="width:13px;height:13px;margin-right:4px;"></i> Download
+                <a href="{{ asset('storage/'.$pendaftaran->motivation_letter) }}" download class="btn-download">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i> Download
                 </a>
             </div>
         </div>
@@ -279,42 +356,42 @@
 
     {{-- 4. SERTIFIKAT ORGANISASI --}}
     <div class="pm-card" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div style="font-size:14px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px;">
                 <i data-lucide="award" style="width:18px;height:18px;color:#185FA5;"></i> 4. Sertifikat Organisasi
             </div>
             @if($pendaftaran->sertifikat_organisasi)
-            <div style="display:flex;gap:8px;">
-                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->sertifikat_organisasi) }}', 'Sertifikat - {{ $pendaftaran->mahasiswa->name }}')" class="pm-btn" style="padding:6px 12px;font-size:11px;background:#eff6ff;color:#185FA5;border-color:#bfdbfe;">
-                    <i data-lucide="eye" style="width:13px;height:13px;margin-right:4px;"></i> Preview
+            <div class="file-actions">
+                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->sertifikat_organisasi) }}', 'Sertifikat - {{ $pendaftaran->mahasiswa->name }}')" class="btn-preview">
+                    <i data-lucide="eye" style="width:14px;height:14px;"></i> Preview
                 </button>
-                <a href="{{ asset('storage/'.$pendaftaran->sertifikat_organisasi) }}" download class="pm-btn" style="padding:6px 12px;font-size:11px;">
-                    <i data-lucide="download" style="width:13px;height:13px;margin-right:4px;"></i> Download
+                <a href="{{ asset('storage/'.$pendaftaran->sertifikat_organisasi) }}" download class="btn-download">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i> Download
                 </a>
             </div>
             @else
-            <div style="font-size:12px;color:#888;">Tidak melampirkan sertifikat.</div>
+            <div style="font-size:12px;color:#888;font-style:italic;">Tidak melampirkan sertifikat.</div>
             @endif
         </div>
     </div>
 
     {{-- 5. SERTIFIKAT MENTORING --}}
     <div class="pm-card" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div style="font-size:14px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px;">
                 <i data-lucide="graduation-cap" style="width:18px;height:18px;color:#185FA5;"></i> 5. Sertifikat Mentoring / Pelatihan
             </div>
             @if($pendaftaran->sertifikat_mentoring)
-            <div style="display:flex;gap:8px;">
-                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}', 'Sertifikat Mentoring - {{ $pendaftaran->mahasiswa->name }}')" class="pm-btn" style="padding:6px 12px;font-size:11px;background:#eff6ff;color:#185FA5;border-color:#bfdbfe;">
-                    <i data-lucide="eye" style="width:13px;height:13px;margin-right:4px;"></i> Preview
+            <div class="file-actions">
+                <button type="button" onclick="openPdf('{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}', 'Sertifikat Mentoring - {{ $pendaftaran->mahasiswa->name }}')" class="btn-preview">
+                    <i data-lucide="eye" style="width:14px;height:14px;"></i> Preview
                 </button>
-                <a href="{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}" download class="pm-btn" style="padding:6px 12px;font-size:11px;">
-                    <i data-lucide="download" style="width:13px;height:13px;margin-right:4px;"></i> Download
+                <a href="{{ asset('storage/'.$pendaftaran->sertifikat_mentoring) }}" download class="btn-download">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i> Download
                 </a>
             </div>
             @else
-            <div style="font-size:12px;color:#888;">Tidak melampirkan sertifikat mentoring.</div>
+            <div style="font-size:12px;color:#888;font-style:italic;">Tidak melampirkan sertifikat mentoring.</div>
             @endif
         </div>
     </div>

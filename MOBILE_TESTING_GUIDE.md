@@ -88,7 +88,7 @@ http://192.168.1.100:8000
 
 ### ✅ Dosen
 - [x] Beranda
-- [x] Daftar Pendaftar
+- [x] Daftar Pendaftar (List) - **BARU: Responsive stats cards & scrollable table**
 - [x] Seleksi & Penilaian
 - [x] Notifikasi
 
