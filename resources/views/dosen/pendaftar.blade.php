@@ -17,14 +17,28 @@
             /* Filter form: stack vertically on mobile */
             .filter-form-responsive {
                 flex-direction: column !important;
+                gap: 8px !important;
             }
             
             .filter-form-responsive select,
             .filter-form-responsive input,
-            .filter-form-responsive button,
-            .filter-form-responsive a {
+            .filter-form-responsive > div {
                 width: 100% !important;
                 min-width: 100% !important;
+            }
+            
+            /* Filter buttons container */
+            .filter-buttons-mobile {
+                display: flex !important;
+                gap: 8px !important;
+                width: 100% !important;
+            }
+            
+            .filter-buttons-mobile button,
+            .filter-buttons-mobile a {
+                flex: 1 !important;
+                min-width: 0 !important;
+                justify-content: center !important;
             }
             
             /* Table wrapper: enable horizontal scroll */
@@ -117,14 +131,16 @@
             <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari nama / NIM..." class="pm-input" style="padding-left:34px;">
             <i data-lucide="search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94a3b8;width:14px;height:14px;"></i>
         </div>
-        <button type="submit" class="pm-btn pm-btn-primary" style="display:flex;align-items:center;gap:6px;">
-            Filter
-        </button>
-        @if(request()->hasAny(['status','prodi','cari']))
-            <a href="{{ route('dosen.pendaftar') }}" class="pm-btn" style="display:flex;align-items:center;gap:6px;">
-                <i data-lucide="x" style="width:14px;height:14px;"></i> Reset
-            </a>
-        @endif
+        <div class="filter-buttons-mobile" style="display:flex;gap:10px;">
+            <button type="submit" class="pm-btn pm-btn-primary" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i data-lucide="filter" style="width:14px;height:14px;"></i> Filter
+            </button>
+            @if(request()->hasAny(['status','prodi','cari']))
+                <a href="{{ route('dosen.pendaftar') }}" class="pm-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;">
+                    <i data-lucide="x" style="width:14px;height:14px;"></i> Reset
+                </a>
+            @endif
+        </div>
     </form>
 
     {{-- TABEL --}}

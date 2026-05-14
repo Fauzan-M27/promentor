@@ -189,7 +189,8 @@
             .adm-sidebar {
                 transform: translateX(-100%);
                 width: 280px;
-                box-shadow: 20px 0 25px -5px rgba(0,0,0,0.1), 10px 0 10px -5px rgba(0,0,0,0.04);
+                left: 0;
+                box-shadow: 2px 0 25px -5px rgba(0,0,0,0.1), 2px 0 10px -5px rgba(0,0,0,0.04);
             }
             .adm-sidebar.open { transform: translateX(0); }
             .adm-main { margin-left: 0; }
@@ -293,7 +294,7 @@
 <div class="adm-main">
     <div class="adm-topbar">
         <div style="display:flex; align-items:center; gap:12px;">
-            <button onclick="toggleSidebar()" style="background:var(--adm-accent-light); border:none; color:var(--adm-accent); width:40px; height:40px; border-radius:10px; align-items:center; justify-content:center; cursor:pointer; padding:0; transition: all 0.2s;" class="mobile-only" id="hamburger">
+            <button onclick="toggleSidebar()" style="background:var(--adm-accent-light); border:none; color:var(--adm-accent); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; transition: all 0.2s;" class="mobile-only" id="hamburger">
                 <i data-lucide="menu" style="width:24px; height:24px;"></i>
             </button>
             <div class="adm-topbar-title">{{ $pageTitle }}</div>

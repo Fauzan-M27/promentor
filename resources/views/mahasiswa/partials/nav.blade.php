@@ -20,17 +20,18 @@
         display: none;
         position: fixed;
         top: 0;
-        right: -100%;
+        left: -100% !important;
+        right: auto !important;
         width: 280px;
         height: 100%;
         background: #fff;
         z-index: 999;
-        transition: right 0.3s;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         overflow-y: auto;
     }
     .pm-mobile-menu.active {
-        right: 0;
+        left: 0 !important;
     }
     .pm-hamburger {
         display: none;
@@ -68,6 +69,13 @@
 
 <nav class="pm-nav">
     <div class="pm-container" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding-top:0;padding-bottom:0;">
+        {{-- Mobile Hamburger (Kiri) --}}
+        <div class="pm-hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
         <div class="pm-nav-logo"><span>PRO-</span><br>MENTOR</div>
         
         {{-- Desktop Menu --}}
@@ -87,13 +95,6 @@
                 @csrf
                 <button type="submit" class="pm-btn">Keluar</button>
             </form>
-        </div>
-
-        {{-- Mobile Hamburger --}}
-        <div class="pm-hamburger" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
         </div>
     </div>
 </nav>

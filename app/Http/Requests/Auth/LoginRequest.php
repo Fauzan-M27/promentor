@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -42,7 +42,14 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Tentukan field login berdasarkan input
+        $loginField = $this->getLoginField();
+        $credentials = [
+            $loginField => $this->input('email'),
+            'password' => $this->input('password')
+        ];
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -51,6 +58,29 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
+     * Tentukan field login berdasarkan input user
+     * 
+     * @return string
+     */
+    protected function getLoginField(): string
+    {
+        $login = $this->input('email');
+        
+        // Jika input adalah email (mengandung @)
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            return 'email';
+        }
+        
+        // Jika input adalah angka dan panjangnya sesuai NIDN (10 digit)
+        if (is_numeric($login) && strlen($login) == 10) {
+            return 'nidn';
+        }
+        
+        // Selain itu, anggap sebagai NIM
+        return 'nim';
     }
 
     /**

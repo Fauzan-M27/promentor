@@ -29,16 +29,16 @@
 
 
 
-            {{-- EMAIL / NIM --}}
+            {{-- EMAIL / NIM / NIDN --}}
             <div style="margin-bottom:12px;">
-                <label class="pm-label" for="email">Email / NIM</label>
+                <label class="pm-label" for="email">Email / NIM / NIDN</label>
                 <input
                     id="email"
                     class="pm-input"
                     type="text"
                     name="email"
                     value="{{ old('email') }}"
-                    placeholder="Masukkan email atau NIM"
+                    placeholder="Masukkan email, NIM, atau NIDN"
                     required
                     autofocus
                     autocomplete="username"
