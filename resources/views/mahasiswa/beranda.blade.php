@@ -21,10 +21,14 @@
                     <div class="pm-info-card-content">
                         <span class="pm-info-card-label" style="color: var(--pm-success);">Mentee Saya</span>
                         <div class="pm-mentee-list">
-                            @foreach($mentees as $m)
+                            @foreach($mentees as $pasangan)
                                 <div class="pm-mentee-item" style="min-width: 120px;">
-                                    <div style="font-size: 13px; font-weight: 700;">{{ $m->name }}</div>
-                                    <div style="font-size: 11px; color: var(--pm-blue); font-weight: 600; margin-top: 2px;"> {{ $m->no_wa }}
+                                    <div style="font-size: 13px; font-weight: 700;">{{ $pasangan->mentee_nama }}</div>
+                                    <div style="font-size: 11px; color: var(--pm-blue); font-weight: 600; margin-top: 2px;">
+                                        {{ $pasangan->mentee_nim }}
+                                        @if($pasangan->mentee_no_telp)
+                                            <br><span style="font-size: 10px;">{{ $pasangan->mentee_no_telp }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -57,173 +61,114 @@
                 </div>
                 <div class="pm-stat-sub">{{ $user->selfAssessment ? $user->selfAssessment->created_at->format('j M Y') : 'Perlu diisi' }}</div>
             </div>
-        @else
-            {{-- MODE MENTEE (Default): Tampilkan Mentor Saya — REDESIGN PREMIUM --}}
-            <div style="grid-column: span 3; position: relative; border-radius: 16px; overflow: hidden;
-                        background: linear-gradient(135deg, #0f172a 0%, #185FA5 50%, #1e40af 100%);
-                        border: none; padding: 0;">
-                @if($mentor)
-                    {{-- Background decorative circles --}}
-                    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;
-                                border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;"></div>
-                    <div style="position:absolute;bottom:-20px;left:60px;width:100px;height:100px;
-                                border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;"></div>
+        @endif
+    </div>
 
-                    <div style="padding: 20px 24px; display: flex; align-items: center; gap: 20px; position: relative;">
-                        {{-- Avatar Mentor --}}
-                        <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.15);
-                                    border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;
-                                    justify-content:center;font-size:20px;font-weight:800;color:#fff;
-                                    flex-shrink:0;">
-                            {{ strtoupper(substr($mentor->name, 0, 2)) }}
+    {{-- STATUS PENDAFTARAN (FULL WIDTH) --}}
+    <div style="margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Status Pendaftaran Saya</div>
+        <div class="pm-card">
+            @if($pendaftaran)
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                    <div>
+                        <div style="font-weight:600;font-size:15px;color:#0f172a;">{{ $user->name }}</div>
+                        <div style="font-size:12px;color:#64748b;margin-top:2px;">{{ $user->nim }} • {{ $user->prodi }}</div>
+                    </div>
+                    @php $bc=match($pendaftaran->status){'diterima'=>'badge-success','ditolak'=>'badge-danger','review'=>'badge-review',default=>'badge-pending'}; @endphp
+                    <span class="badge {{ $bc }}" style="font-size:12px;padding:6px 14px;">{{ ucfirst($pendaftaran->status) }}</span>
+                </div>
+                
+                <div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:14px;border-left:3px solid #185FA5;">
+                    <div style="font-size:12px;color:#475569;line-height:1.6;">
+                        @if($pendaftaran->status === 'diterima')
+                            <strong style="color:#166534;">🎉 Selamat!</strong> Anda telah resmi menjadi <strong>Mentor PRO-MENTOR</strong>. Silakan cek daftar mentee yang dipasangkan dengan Anda di card "Mentee Saya" di atas.
+                        @elseif($pendaftaran->status === 'ditolak')
+                            <strong style="color:#991b1b;">Mohon maaf,</strong> pendaftaran Anda belum dapat kami terima pada periode ini. Anda dapat mencoba mendaftar kembali pada periode berikutnya.
+                        @elseif($pendaftaran->status === 'review')
+                            <strong style="color:#1e40af;">Dalam Review</strong> — Berkas Anda sedang dalam tahap penilaian oleh dosen pengelola. Harap menunggu pengumuman hasil seleksi.
+                        @else
+                            <strong style="color:#92400e;">Menunggu Seleksi</strong> — Berkas Anda sedang dalam antrian untuk diproses oleh tim seleksi.
+                        @endif
+                    </div>
+                </div>
+                
+                {{-- PROGRESS STEPS --}}
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                    @php
+                        $step1 = true; // berkas lengkap selalu true jika sudah daftar
+                        $step2 = in_array($pendaftaran->status, ['review','diterima','ditolak']);
+                        $step3 = in_array($pendaftaran->status, ['diterima','ditolak']);
+                    @endphp
+                    <div style="text-align:center;padding:10px 8px;border-radius:8px;font-size:11px;font-weight:600;
+                        background:{{ $step1 ? '#dcfce7' : '#f5f6fa' }};color:{{ $step1 ? '#166534' : '#94a3b8' }};
+                        border:2px solid {{ $step1 ? '#86efac' : '#e2e8f0' }};position:relative;">
+                        @if($step1)
+                            <div style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="check" style="width:12px;height:12px;color:#fff;stroke-width:3;"></i>
+                            </div>
+                        @endif
+                        <div style="margin-bottom:4px;">
+                            <i data-lucide="file-check" style="width:16px;height:16px;"></i>
                         </div>
-
-                        {{-- Info Mentor --}}
-                        <div style="flex:1;min-width:0;">
-                            <div style="font-size:10px;font-weight:700;text-transform:uppercase;
-                                        letter-spacing:1.5px;color:rgba(255,255,255,.7);margin-bottom:4px;">
-                                ✦ Mentor Saya
+                        Berkas Lengkap
+                    </div>
+                    <div style="text-align:center;padding:10px 8px;border-radius:8px;font-size:11px;font-weight:600;
+                        background:{{ $step2 ? '#fef3c7' : '#f5f6fa' }};color:{{ $step2 ? '#92400e' : '#94a3b8' }};
+                        border:2px solid {{ $step2 ? '#fde047' : '#e2e8f0' }};position:relative;">
+                        @if($step2)
+                            <div style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#92400e;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="check" style="width:12px;height:12px;color:#fff;stroke-width:3;"></i>
                             </div>
-                            <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.2;">
-                                {{ $mentor->name }}
-                            </div>
-                            <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">
-                                <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.8);">
-                                    <i data-lucide="hash" style="width:12px;height:12px;"></i> {{ $mentor->nim }}
-                                </span>
-                                <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.8);">
-                                    <i data-lucide="graduation-cap" style="width:12px;height:12px;"></i> Sem. {{ $mentor->semester }}
-                                </span>
-                                <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.8);">
-                                    <i data-lucide="phone" style="width:12px;height:12px;"></i> {{ $mentor->no_wa }}
-                                </span>
-                            </div>
+                        @endif
+                        <div style="margin-bottom:4px;">
+                            <i data-lucide="search-check" style="width:16px;height:16px;"></i>
                         </div>
-
-                        {{-- Tombol WA --}}
-                        @if($mentor->no_wa)
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $mentor->no_wa) }}"
-                               target="_blank"
-                               style="flex-shrink:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
-                                      border-radius:10px;padding:8px 14px;color:#fff;text-decoration:none;
-                                      font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;
-                                      transition:background .2s;"
-                               onmouseover="this.style.background='rgba(255,255,255,.25)'"
-                               onmouseout="this.style.background='rgba(255,255,255,.15)'">
-                                <i data-lucide="message-circle" style="width:14px;height:14px;"></i> Hubungi
+                        Seleksi Aktif
+                    </div>
+                    <div style="text-align:center;padding:10px 8px;border-radius:8px;font-size:11px;font-weight:600;
+                        background:{{ $step3 ? '#dcfce7' : '#f5f6fa' }};color:{{ $step3 ? '#166534' : '#94a3b8' }};
+                        border:2px solid {{ $step3 ? '#86efac' : '#e2e8f0' }};position:relative;">
+                        @if($step3)
+                            <div style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="check" style="width:12px;height:12px;color:#fff;stroke-width:3;"></i>
+                            </div>
+                        @endif
+                        <div style="margin-bottom:4px;">
+                            <i data-lucide="megaphone" style="width:16px;height:16px;"></i>
+                        </div>
+                        Pengumuman
+                    </div>
+                </div>
+                
+                {{-- Quick Actions in Card --}}
+                @if($pendaftaran->status !== 'diterima')
+                    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+                        @if(!$user->selfAssessment)
+                            <a href="{{ route('mahasiswa.self-assessment.create') }}" class="pm-btn pm-btn-primary" style="flex:1;min-width:140px;text-decoration:none;text-align:center;font-size:12px;padding:10px;">
+                                <i data-lucide="clipboard-check" style="width:14px;height:14px;"></i> Isi Self Assessment
+                            </a>
+                        @endif
+                        @if($user->selfAssessment)
+                            <a href="{{ route('mahasiswa.seleksi') }}" class="pm-btn" style="flex:1;min-width:140px;text-decoration:none;text-align:center;font-size:12px;padding:10px;">
+                                <i data-lucide="eye" style="width:14px;height:14px;"></i> Lihat Status Seleksi
                             </a>
                         @endif
                     </div>
-                @else
-                    <div style="padding: 24px; display:flex; align-items:center; gap:16px; position:relative;">
-                        <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);
-                                    display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <i data-lucide="user-x" style="width:24px;height:24px;color:rgba(255,255,255,.5);"></i>
-                        </div>
-                        <div>
-                            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
-                                        color:rgba(255,255,255,.6);margin-bottom:4px;">Mentor Saya</div>
-                            <div style="font-size:16px;font-weight:600;color:rgba(255,255,255,.5);">
-                                Anda belum dipasangkan dengan mentor
-                            </div>
-                        </div>
-                    </div>
                 @endif
-            </div>
-        @endif
-
-        {{-- CARD FEEDBACK DIKIRIM — REDESIGN PREMIUM --}}
-        <div style="position:relative;border-radius:14px;overflow:hidden;
-                    background:linear-gradient(145deg,#fff 0%,#f0f9ff 100%);
-                    border:1.5px solid #bfdbfe;padding:18px 20px;
-                    display:flex;flex-direction:column;justify-content:space-between;">
-            {{-- Decorative circle --}}
-            <div style="position:absolute;top:-16px;right:-16px;width:80px;height:80px;
-                        border-radius:50%;background:linear-gradient(135deg,#dbeafe,#93c5fd);
-                        opacity:.4;pointer-events:none;"></div>
-
-            <div style="position:relative;">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
-                    <div style="width:28px;height:28px;border-radius:8px;
-                                background:linear-gradient(135deg,#185FA5,#1e40af);
-                                display:flex;align-items:center;justify-content:center;">
-                        <i data-lucide="star" style="width:14px;height:14px;color:#fff;fill:#fff;"></i>
+            @else
+                <div style="text-align:center;padding:32px 20px;display:flex;flex-direction:column;align-items:center;">
+                    <div style="width:64px;height:64px;border-radius:50%;background:#f0f9ff;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                        <i data-lucide="clipboard-list" style="width:32px;height:32px;color:#185FA5;"></i>
                     </div>
-                    <span style="font-size:11px;font-weight:700;color:#185FA5;text-transform:uppercase;letter-spacing:.8px;">Feedback</span>
+                    <div style="font-size:15px;font-weight:600;color:#0f172a;margin-bottom:6px;">Belum Mendaftar</div>
+                    <div style="font-size:13px;color:#64748b;margin-bottom:16px;max-width:400px;">
+                        Anda belum mendaftar sebagai calon mentor. Daftarkan diri Anda sekarang untuk menjadi bagian dari PRO-MENTOR!
+                    </div>
+                    <a href="{{ route('mahasiswa.daftar.create') }}" class="pm-btn pm-btn-primary" style="text-decoration:none;font-size:13px;padding:10px 24px;display:inline-flex;align-items:center;gap:8px;">
+                        <i data-lucide="user-plus" style="width:16px;height:16px;"></i> Daftar Jadi Mentor
+                    </a>
                 </div>
-                <div style="font-size:36px;font-weight:800;color:#0f172a;line-height:1;">{{ $feedback_count }}</div>
-                <div style="font-size:11px;color:#64748b;margin-top:4px;font-weight:500;">Ulasan terkirim</div>
-            </div>
-
-            <a href="{{ route('mahasiswa.feedback.create') }}"
-               style="margin-top:14px;display:block;text-align:center;background:linear-gradient(135deg,#185FA5,#1e40af);
-                      color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;
-                      text-decoration:none;transition:opacity .2s;"
-               onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                + Beri Feedback
-            </a>
-        </div>
-    </div>
-
-    {{-- DUA KOLOM --}}
-    <div class="pm-grid-2" style="margin-bottom:16px;">
-
-        {{-- KIRI: STATUS PENDAFTARAN --}}
-        <div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Status Pendaftaran Saya</div>
-            <div class="pm-card">
-                @if($pendaftaran)
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="font-weight:600;font-size:13px;">{{ $user->name }} · {{ $user->nim }}</span>
-                        @php $bc=match($pendaftaran->status){'diterima'=>'badge-success','ditolak'=>'badge-danger','review'=>'badge-review',default=>'badge-pending'}; @endphp
-                        <span class="badge {{ $bc }}">{{ ucfirst($pendaftaran->status) }}</span>
-                    </div>
-                    <div style="font-size:12px;color:#888;margin-bottom:12px;">
-                        {{ $pendaftaran->status === 'diterima' ? 'Selamat! Anda telah resmi menjadi mentor PRO-MENTOR.' : 'Berkas sedang dalam tahap seleksi administrasi oleh dosen pengelola.' }}
-                    </div>
-                    {{-- PROGRESS STEPS --}}
-                    <div style="display:flex;gap:6px;">
-                        @php
-                            $step1 = true; // berkas lengkap selalu true jika sudah daftar
-                            $step2 = in_array($pendaftaran->status, ['review','diterima','ditolak']);
-                            $step3 = in_array($pendaftaran->status, ['diterima','ditolak']);
-                        @endphp
-                        <div style="flex:1;text-align:center;padding:6px;border-radius:8px;font-size:11px;font-weight:500;
-                            background:{{ $step1 ? '#dcfce7' : '#f5f6fa' }};color:{{ $step1 ? '#166534' : '#aaa' }};">
-                            Berkas Lengkap
-                        </div>
-                        <div style="flex:1;text-align:center;padding:6px;border-radius:8px;font-size:11px;font-weight:500;
-                            background:{{ $step2 ? '#fef3c7' : '#f5f6fa' }};color:{{ $step2 ? '#92400e' : '#aaa' }};">
-                            Seleksi Aktif
-                        </div>
-                        <div style="flex:1;text-align:center;padding:6px;border-radius:8px;font-size:11px;font-weight:500;
-                            background:{{ $step3 ? '#dcfce7' : '#f5f6fa' }};color:{{ $step3 ? '#166534' : '#aaa' }};">
-                            Pengumuman
-                        </div>
-                    </div>
-                @else
-                    <div style="text-align:center;padding:20px 0;display:flex;flex-direction:column;align-items:center;">
-                        <i data-lucide="clipboard-list" style="width:36px;height:36px;color:#cbd5e1;margin-bottom:12px;"></i>
-                        <div style="font-size:13px;color:#888;margin-bottom:12px;">Anda belum mendaftar sebagai calon mentor.</div>
-                        <a href="{{ route('mahasiswa.daftar.create') }}" class="pm-btn pm-btn-primary" style="text-decoration:none;font-size:13px;">Daftar Jadi Mentor</a>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- KANAN: AKSI CEPAT --}}
-        <div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Aksi Cepat</div>
-            <div class="pm-grid-2" style="gap:8px;">
-                @if($pendaftaran)
-                    <a href="{{ route('mahasiswa.self-assessment.create') }}" class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Self Assessment</a>
-                @endif
-                <a href="{{ route('mahasiswa.feedback.create') }}"        class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Beri Feedback</a>
-                @if($user->selfAssessment)
-                    <a href="{{ route('mahasiswa.seleksi') }}"                class="pm-btn" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Status Seleksi</a>
-                @endif
-                <a href="{{ route('mahasiswa.notifikasi') }}"             class="pm-btn pm-btn-primary" style="padding:14px;font-size:12px;text-align:center;text-decoration:none;display:block;">Notifikasi</a>
-            </div>
+            @endif
         </div>
     </div>
 

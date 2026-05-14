@@ -140,45 +140,63 @@
     {{-- 2. TAMBAH PASANGAN BARU (FORM) --}}
     <div style="margin-bottom:32px;">
         <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Tambah Pasangan Baru</div>
-        <div class="pm-card" style="max-width:800px;">
-            <form method="POST" action="{{ route('admin.pasangan.store') }}" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;align-items:end;">
+        <div class="pm-card" style="max-width:900px;">
+            <form method="POST" action="{{ route('admin.pasangan.store') }}" style="display:grid;grid-template-columns:repeat(2, 1fr);gap:20px;">
                 @csrf
-                <div>
-                    <label class="pm-label">Pilih Mentor</label>
+                
+                {{-- Kolom Kiri: Mentor --}}
+                <div style="grid-column: span 2;">
+                    <div style="font-size:12px;font-weight:600;color:#185FA5;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Pilih Mentor</div>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label class="pm-label">Mentor <span style="color:#dc2626;">*</span></label>
                     <select name="mentor_id" class="pm-input" required>
                         <option value="">— Pilih Mentor —</option>
                         @foreach($mentor_tersedia as $m)
                             <option value="{{ $m->id }}" {{ old('mentor_id')==$m->id?'selected':'' }}>
-                                {{ $m->name }} ({{ $m->nim }})
+                                {{ $m->name }} ({{ $m->nim }}) - {{ $m->prodi }}
                             </option>
                         @endforeach
                     </select>
                     @error('mentor_id')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
                 </div>
-                <div>
-                    <label class="pm-label">Pilih Mentee</label>
-                    <select name="mentee_id" class="pm-input" required>
-                        <option value="">— Pilih Mentee —</option>
-                        @foreach($mentee_tersedia as $m)
-                            <option value="{{ $m->id }}" {{ old('mentee_id')==$m->id?'selected':'' }}>
-                                {{ $m->name }} ({{ $m->nim }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('mentee_id')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+
+                {{-- Kolom Kanan: Data Mentee (Input Manual) --}}
+                <div style="grid-column: span 2;margin-top:16px;">
+                    <div style="font-size:12px;font-weight:600;color:#185FA5;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Data Mentee (Input Manual)</div>
                 </div>
+                
                 <div>
-                    <label class="pm-label">Program Studi</label>
+                    <label class="pm-label">Nama Lengkap Mentee <span style="color:#dc2626;">*</span></label>
+                    <input type="text" name="mentee_nama" class="pm-input" value="{{ old('mentee_nama') }}" placeholder="Contoh: Ahmad Rizki" required>
+                    @error('mentee_nama')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+                </div>
+                
+                <div>
+                    <label class="pm-label">NIM Mentee <span style="color:#dc2626;">*</span></label>
+                    <input type="text" name="mentee_nim" class="pm-input" value="{{ old('mentee_nim') }}" placeholder="Contoh: 2021001" required>
+                    @error('mentee_nim')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+                </div>
+                
+                <div>
+                    <label class="pm-label">No. Telepon/WA Mentee</label>
+                    <input type="text" name="mentee_no_telp" class="pm-input" value="{{ old('mentee_no_telp') }}" placeholder="Contoh: 081234567890">
+                    @error('mentee_no_telp')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
+                </div>
+                
+                <div>
+                    <label class="pm-label">Program Studi <span style="color:#dc2626;">*</span></label>
                     <select name="prodi" class="pm-input" required>
                         <option value="">— Pilih Prodi —</option>
-                        <option value="PTIK"           {{ old('prodi')==='PTIK'           ?'selected':'' }}>PTIK</option>
-                        <option value="Teknik Komputer"{{ old('prodi')==='Teknik Komputer'?'selected':'' }}>Teknik Komputer</option>
+                        <option value="PTIK"            {{ old('prodi')==='PTIK'            ?'selected':'' }}>PTIK</option>
+                        <option value="Teknik Komputer" {{ old('prodi')==='Teknik Komputer' ?'selected':'' }}>Teknik Komputer</option>
                     </select>
                     @error('prodi')<div style="color:#991b1b;font-size:11px;margin-top:3px;">{{ $message }}</div>@enderror
                 </div>
-                <div style="grid-column: span auto;">
-                    <button type="submit" class="pm-btn-primary" style="width:100%;padding:10px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;">
-                        <i data-lucide="plus-circle" style="width:18px;height:18px;"></i> Simpan
+                
+                <div style="grid-column: span 2;margin-top:8px;">
+                    <button type="submit" class="pm-btn-primary" style="width:100%;padding:12px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <i data-lucide="plus-circle" style="width:18px;height:18px;"></i> Tambah Pasangan Mentor-Mentee
                     </button>
                 </div>
             </form>
@@ -186,7 +204,7 @@
     </div>
 
     {{-- 3. STATISTIK RINGKASAN --}}
-    <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;margin-bottom:32px;" class="adm-stat-grid-4">
+    <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;margin-bottom:32px;" class="adm-stat-grid-4">
         <div class="pm-card" style="padding:16px;text-align:center;margin-bottom:0;">
             <div style="font-size:24px;font-weight:700;color:#1d4ed8;">{{ $semua_pasangan->count() }}</div>
             <div style="font-size:12px;color:#64748b;margin-top:4px;font-weight:500;">Total Pasangan</div>
@@ -196,8 +214,8 @@
             <div style="font-size:12px;color:#64748b;margin-top:4px;font-weight:500;">Mentor Aktif</div>
         </div>
         <div class="pm-card" style="padding:16px;text-align:center;margin-bottom:0;">
-            <div style="font-size:24px;font-weight:700;color:#185FA5;">{{ $mentee_tersedia->count() }}</div>
-            <div style="font-size:12px;color:#64748b;margin-top:4px;font-weight:500;">Mentee Tersedia</div>
+            <div style="font-size:24px;font-weight:700;color:#185FA5;">{{ $semua_pasangan->count() }}</div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;font-weight:500;">Total Mentee</div>
         </div>
         <div class="pm-card" style="padding:16px;text-align:center;margin-bottom:0;">
             <div style="font-size:24px;font-weight:700;color:#6366f1;">{{ count($pasangan_grouped) }}</div>
@@ -273,13 +291,18 @@
                     
                     @foreach($group as $ps)
                         <div class="mentee-card">
-                            <div style="display:flex;align-items:center;gap:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;flex:1;">
                                 <div style="width:36px;height:36px;border-radius:50%;background:#f1f5f9;color:#475569;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">
-                                    {{ strtoupper(substr($ps->mentee->name,0,2)) }}
+                                    {{ strtoupper(substr($ps->mentee_nama,0,2)) }}
                                 </div>
-                                <div>
-                                    <div style="font-size:14px;font-weight:600;color:#0f172a;">{{ $ps->mentee->name }}</div>
-                                    <div style="font-size:12px;color:#64748b;margin-top:2px;">NIM: {{ $ps->mentee->nim ?? '-' }}</div>
+                                <div style="flex:1;">
+                                    <div style="font-size:14px;font-weight:600;color:#0f172a;">{{ $ps->mentee_nama }}</div>
+                                    <div style="font-size:12px;color:#64748b;margin-top:2px;">
+                                        NIM: {{ $ps->mentee_nim }}
+                                        @if($ps->mentee_no_telp)
+                                            <span style="margin-left:8px;">• WA: {{ $ps->mentee_no_telp }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             

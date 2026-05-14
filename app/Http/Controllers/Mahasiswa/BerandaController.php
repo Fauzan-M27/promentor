@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
-use App\Models\Feedback;
 
 class BerandaController extends Controller
 {
@@ -11,19 +10,15 @@ class BerandaController extends Controller
     {
         $user        = auth()->user();
         $pendaftaran = $user->pendaftaran()->with('penilaian')->first();
-        $feedback_count = Feedback::where('mentee_id', $user->id)->count();
 
         // Cek apakah registrasi (Pendaftaran + Self Assessment) sudah selesai
         $is_registrasi_selesai = $pendaftaran && $user->selfAssessment()->exists();
 
-        // Ambil data mentor jika ada (untuk mode Mentee)
-        $pasangan_mentor = $user->mentor()->with('mentor')->first();
-        $mentor          = $pasangan_mentor?->mentor;
-
         // Ambil data mentees jika user sudah lolos seleksi (untuk mode Mentor)
         $mentees = [];
         if ($pendaftaran && $pendaftaran->status === 'diterima') {
-            $mentees = $user->mentees()->with('mentee')->get()->pluck('mentee');
+            // Mentee sekarang adalah data manual (bukan relasi ke User)
+            $mentees = $user->mentees()->get(); // Langsung ambil dari tabel pasangan
         }
 
         $tahapan = [
@@ -35,8 +30,8 @@ class BerandaController extends Controller
         ];
 
         return view('mahasiswa.beranda', compact(
-            'user', 'pendaftaran', 'feedback_count', 'tahapan', 
-            'is_registrasi_selesai', 'mentor', 'mentees'
+            'user', 'pendaftaran', 'tahapan', 
+            'is_registrasi_selesai', 'mentees'
         ));
     }
 }

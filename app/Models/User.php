@@ -67,11 +67,8 @@ class User extends Authenticatable
         return $this->hasMany(Pasangan::class, 'mentor_id');
     }
 
-    // Relasi sebagai mentee
-    public function mentor()
-    {
-        return $this->hasOne(Pasangan::class, 'mentee_id');
-    }
+    // Mentee tidak lagi punya relasi (input manual di tabel pasangan)
+    // Mahasiswa yang jadi mentor bisa lihat mentee mereka via: $user->mentees
 
     // Notifikasi milik user ini
     public function notifikasi()
@@ -79,17 +76,7 @@ class User extends Authenticatable
         return $this->hasMany(Notifikasi::class);
     }
 
-    // Feedback yang diberikan (sebagai mentee)
-    public function feedbackDiberikan()
-    {
-        return $this->hasMany(Feedback::class, 'mentee_id');
-    }
-
-    // Feedback yang diterima (sebagai mentor)
-    public function feedbackDiterima()
-    {
-        return $this->hasMany(Feedback::class, 'mentor_id');
-    }
+    // Feedback dihapus - tidak digunakan lagi
 
     // Self assessment
     public function selfAssessment()

@@ -262,10 +262,6 @@
        class="adm-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
         <span class="icon"><i data-lucide="users-round"></i></span> Pasangan Mentor
     </a>
-    <a href="{{ route('admin.feedback') }}"
-       class="adm-nav-item {{ request()->routeIs('admin.feedback*') ? 'active' : '' }}">
-        <span class="icon"><i data-lucide="message-square"></i></span> Feedback Mentor
-    </a>
     <a href="{{ route('admin.laporan') }}"
        class="adm-nav-item {{ request()->routeIs('admin.laporan*') ? 'active' : '' }}">
         <span class="icon"><i data-lucide="bar-chart-3"></i></span> Laporan & Analitik

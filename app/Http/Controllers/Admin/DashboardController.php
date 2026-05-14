@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Pendaftaran;
 use App\Models\Pasangan;
-use App\Models\Feedback;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -20,7 +19,6 @@ class DashboardController extends Controller
             'total_mahasiswa' => User::where('role', 'mahasiswa')->count(),
             'total_pendaftar' => Pendaftaran::count(),
             'total_pasangan'  => Pasangan::count(),
-            'total_feedback'  => Feedback::count(),
             'pending_seleksi' => Pendaftaran::where('status', 'pending')->count(),
         ];
 

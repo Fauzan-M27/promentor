@@ -13,7 +13,9 @@ class Pasangan extends Model
 
     protected $fillable = [
         'mentor_id',
-        'mentee_id',
+        'mentee_nama',
+        'mentee_nim',
+        'mentee_no_telp',
         'prodi',
         'tahun_ajaran',
         'status',
@@ -24,13 +26,6 @@ class Pasangan extends Model
         return $this->belongsTo(User::class, 'mentor_id');
     }
 
-    public function mentee()
-    {
-        return $this->belongsTo(User::class, 'mentee_id');
-    }
-
-    public function feedback()
-    {
-        return $this->hasMany(Feedback::class);
-    }
+    // Mentee tidak lagi punya relasi ke User (input manual)
+    // Akses data mentee langsung dari kolom: mentee_nama, mentee_nim, mentee_no_telp
 }

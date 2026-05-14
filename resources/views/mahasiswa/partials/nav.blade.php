@@ -163,7 +163,6 @@ function toggleMobileMenu() {
             <a href="{{ route('mahasiswa.seleksi') }}" class="pm-tab {{ request()->routeIs('mahasiswa.seleksi') ? 'active' : '' }}">Seleksi</a>
         @endif
 
-        <a href="{{ route('mahasiswa.feedback.create') }}"       class="pm-tab {{ request()->routeIs('mahasiswa.feedback.*')            ? 'active' : '' }}">Feedback</a>
         <a href="{{ route('mahasiswa.notifikasi') }}" class="pm-tab {{ request()->routeIs('mahasiswa.notifikasi') ? 'active' : '' }}">
             <span>Notifikasi</span>
             @php $notifBaru = auth()->user()->notifikasi()->where('dibaca',false)->count(); @endphp

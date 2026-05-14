@@ -69,11 +69,6 @@ Route::middleware(['auth', 'role:mahasiswa'])
         Route::post('/self-assessment', [\App\Http\Controllers\Mahasiswa\SelfAssessmentController::class, 'store'])
             ->name('self-assessment.store');
 
-        Route::get('/feedback', [\App\Http\Controllers\Mahasiswa\FeedbackController::class, 'create'])
-            ->name('feedback.create');
-        Route::post('/feedback', [\App\Http\Controllers\Mahasiswa\FeedbackController::class, 'store'])
-            ->name('feedback.store');
-
         Route::get('/notifikasi', [\App\Http\Controllers\Mahasiswa\NotifikasiController::class, 'index'])
             ->name('notifikasi');
         Route::post('/notifikasi/{notifikasi}/baca', [\App\Http\Controllers\Mahasiswa\NotifikasiController::class, 'tandaiBaca'])
@@ -108,11 +103,6 @@ Route::middleware(['auth', 'role:admin'])
             ->name('pasangan.store');
         Route::patch('/pasangan/{pasangan}/status', [\App\Http\Controllers\Admin\PasanganController::class, 'updateStatus'])
             ->name('pasangan.status');
-
-        Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])
-            ->name('feedback');
-        Route::get('/feedback/{mentor}', [\App\Http\Controllers\Admin\FeedbackController::class, 'show'])
-            ->name('feedback.show');
 
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])
             ->name('laporan');

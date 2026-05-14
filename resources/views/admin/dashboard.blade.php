@@ -45,14 +45,6 @@
         </div>
 
         <div class="adm-stat-card">
-            <div class="adm-stat-icon" style="background:#fefce8;">
-                <i data-lucide="star" style="color:#ca8a04;"></i>
-            </div>
-            <div class="adm-stat-val">{{ $stats['total_feedback'] }}</div>
-            <div class="adm-stat-lbl">Feedback Masuk</div>
-        </div>
-
-        <div class="adm-stat-card">
             <div class="adm-stat-icon" style="background:#fef2f2;">
                 <i data-lucide="clock" style="color:#dc2626;"></i>
             </div>

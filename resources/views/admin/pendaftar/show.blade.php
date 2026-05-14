@@ -416,25 +416,57 @@
             @php $sa = $pendaftaran->selfAssessment; @endphp
             
             <div class="info-row">
-                <div class="info-label">Komunikasi</div>
-                <div class="info-value">{{ $sa->komunikasi ?? '—' }}/5</div>
+                <div class="info-label">Kemampuan Akademik</div>
+                <div class="info-value">{{ $sa->q1_kemampuan_akademik ?? '—' }}/4</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Empati</div>
-                <div class="info-value">{{ $sa->empati ?? '—' }}/5</div>
+                <div class="info-label">Kemampuan Menjelaskan</div>
+                <div class="info-value">{{ $sa->q2_kemampuan_menjelaskan ?? '—' }}/4</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Kepemimpinan</div>
-                <div class="info-value">{{ $sa->kepemimpinan ?? '—' }}/5</div>
+                <div class="info-label">Komunikasi & Empati</div>
+                <div class="info-value">{{ $sa->q3_komunikasi_empati ?? '—' }}/4</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Problem Solving</div>
-                <div class="info-value">{{ $sa->problem_solving ?? '—' }}/5</div>
+                <div class="info-label">Ketersediaan Waktu</div>
+                <div class="info-value">{{ $sa->q4_ketersediaan_waktu ?? '—' }}/4</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Manajemen Waktu</div>
-                <div class="info-value">{{ $sa->manajemen_waktu ?? '—' }}/5</div>
+                <div class="info-label">Pengalaman Kepemimpinan</div>
+                <div class="info-value">{{ $sa->q5_pengalaman_kepemimpinan ?? '—' }}/4</div>
             </div>
+            <div class="info-row">
+                <div class="info-label">Motivasi</div>
+                <div class="info-value">{{ $sa->q6_motivasi ?? '—' }}/4</div>
+            </div>
+            
+            {{-- Refleksi Diri --}}
+            @if($sa->kelebihan || $sa->kelemahan || $sa->rencana_jika_kesulitan)
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0;">
+                    <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:12px;text-transform:uppercase;">Refleksi Diri</div>
+                    
+                    @if($sa->kelebihan)
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:4px;">Kelebihan:</div>
+                            <div style="font-size:12px;color:#64748b;line-height:1.6;background:#f8fafc;padding:10px;border-radius:6px;">{{ $sa->kelebihan }}</div>
+                        </div>
+                    @endif
+                    
+                    @if($sa->kelemahan)
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:4px;">Kelemahan & Perbaikan:</div>
+                            <div style="font-size:12px;color:#64748b;line-height:1.6;background:#f8fafc;padding:10px;border-radius:6px;">{{ $sa->kelemahan }}</div>
+                        </div>
+                    @endif
+                    
+                    @if($sa->rencana_jika_kesulitan)
+                        <div>
+                            <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:4px;">Rencana Jika Kesulitan:</div>
+                            <div style="font-size:12px;color:#64748b;line-height:1.6;background:#f8fafc;padding:10px;border-radius:6px;">{{ $sa->rencana_jika_kesulitan }}</div>
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
     @endif
 
