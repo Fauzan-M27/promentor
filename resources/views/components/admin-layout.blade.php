@@ -70,38 +70,6 @@
         .adm-nav-item .icon { width: 20px; height: 20px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
         .adm-nav-item .icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; }
 
-        /* SUB-NAV STYLES */
-        .adm-nav-group { position: relative; }
-        .adm-sub-nav { 
-            display: none; 
-            flex-direction: column; 
-            padding-left: 28px; 
-            margin-bottom: 8px;
-        }
-        .adm-nav-group.expanded .adm-sub-nav { display: flex; }
-        .adm-sub-nav-item {
-            padding: 6px 16px;
-            font-size: 12px;
-            color: #94a3b8;
-            text-decoration: none;
-            transition: all .15s;
-            border-radius: 6px;
-            margin: 1px 8px;
-            display: flex;
-            align-items: center;
-        }
-        .adm-sub-nav-item:hover { color: #fff; background: rgba(255,255,255,.05); }
-        .adm-sub-nav-item.active { color: #60a5fa; font-weight: 600; }
-        
-        .group-arrow { 
-            margin-left: auto; 
-            width: 14px !important; 
-            height: 14px !important; 
-            transition: transform .2s;
-            color: var(--adm-text-muted);
-        }
-        .adm-nav-group.expanded .group-arrow { transform: rotate(90deg); }
-
         .adm-stat-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
         .adm-stat-icon svg { width:18px; height:18px; stroke-width:2; fill:none; }
         .adm-sidebar-footer {
@@ -282,43 +250,25 @@
        class="adm-nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
         <span class="icon"><i data-lucide="users"></i></span> Kelola User
     </a>
-
     <a href="{{ route('admin.pendaftar.index') }}"
        class="adm-nav-item {{ request()->routeIs('admin.pendaftar.*') ? 'active' : '' }}">
         <span class="icon"><i data-lucide="clipboard-list"></i></span> Data Pendaftar
     </a>
-
-    <div class="adm-nav-section">Akses Cepat</div>
-    
-    {{-- Sisi Dosen with Sub-menu --}}
-    @php
-        $isDosenActive = request()->routeIs(['dosen.*', 'admin.pasangan*', 'admin.feedback*', 'admin.laporan*', 'admin.dosen*']);
-    @endphp
-    
-    <div class="adm-nav-group {{ $isDosenActive ? 'expanded' : '' }}">
-        <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('expanded')" class="adm-nav-item {{ $isDosenActive ? 'active' : '' }}">
-            <span class="icon"><i data-lucide="graduation-cap"></i></span> 
-            <span>Sisi Dosen</span>
-            <i data-lucide="chevron-right" class="group-arrow"></i>
-        </a>
-        <div class="adm-sub-nav">
-            <a href="{{ route('admin.dosen.index') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.dosen*') ? 'active' : '' }}">
-                Manajemen Dosen
-            </a>
-            <a href="{{ route('admin.pasangan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
-                Pasangan Mentor
-            </a>
-            <a href="{{ route('admin.feedback') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.feedback*') ? 'active' : '' }}">
-                Feedback Mentor
-            </a>
-            <a href="{{ route('admin.laporan') }}" class="adm-sub-nav-item {{ request()->routeIs('admin.laporan*') ? 'active' : '' }}">
-                Laporan & Analitik
-            </a>
-        </div>
-    </div>
-
-    <a href="{{ route('mahasiswa.beranda') }}" class="adm-nav-item" target="_blank">
-        <span class="icon"><i data-lucide="user"></i></span> Sisi Mahasiswa
+    <a href="{{ route('admin.dosen.index') }}"
+       class="adm-nav-item {{ request()->routeIs('admin.dosen*') ? 'active' : '' }}">
+        <span class="icon"><i data-lucide="graduation-cap"></i></span> Manajemen Dosen
+    </a>
+    <a href="{{ route('admin.pasangan') }}"
+       class="adm-nav-item {{ request()->routeIs('admin.pasangan*') ? 'active' : '' }}">
+        <span class="icon"><i data-lucide="users-round"></i></span> Pasangan Mentor
+    </a>
+    <a href="{{ route('admin.feedback') }}"
+       class="adm-nav-item {{ request()->routeIs('admin.feedback*') ? 'active' : '' }}">
+        <span class="icon"><i data-lucide="message-square"></i></span> Feedback Mentor
+    </a>
+    <a href="{{ route('admin.laporan') }}"
+       class="adm-nav-item {{ request()->routeIs('admin.laporan*') ? 'active' : '' }}">
+        <span class="icon"><i data-lucide="bar-chart-3"></i></span> Laporan & Analitik
     </a>
 
     <div class="adm-sidebar-footer">
